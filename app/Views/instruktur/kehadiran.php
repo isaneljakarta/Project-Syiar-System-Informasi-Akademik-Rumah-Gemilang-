@@ -3,23 +3,34 @@
 <div class="flex-1 min-w-0 flex flex-col overflow-hidden bg-[#F8FAFC]">
         
     <!-- Top Navbar -->
-    <header class="h-16 bg-white border-b border-[#E2E8F0] flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
-        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-            <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-2 -ml-1 text-slate-600 hover:text-brand hover:bg-slate-100 rounded-lg transition" aria-label="Buka Menu Navigasi">
-                <i class="fa-solid fa-bars text-lg"></i>
-            </button>
-            <h1 class="text-base sm:text-lg font-bold text-[#1E293B] truncate sg-display"><?= esc($title); ?></h1>
-            <span class="hidden sm:inline-flex bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-emerald-100 items-center gap-1 shrink-0">
-                <i class="fa-solid fa-clipboard-user"></i> Presensi Kehadiran Santri
-            </span>
-        </div>
-        <span class="hidden sm:inline-flex text-xs text-slate-500 font-medium">
-            <i class="fa-solid fa-calendar-day text-emerald-600 mr-1"></i> Tanggal Hari Ini: <?= date('d M Y'); ?>
-        </span>
-    </header>
+    <?php 
+    $page_title = $title ?? 'Presensi Kehadiran Santri';
+    require_once __DIR__ . '/components/topbar.php'; 
+    ?>
 
     <!-- Main Content -->
-    <main class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+    <main class="flex-1 overflow-y-auto pb-16">
+
+        <!-- ===================== HERO WAVE BANNER ===================== -->
+        <?php
+        $hero = [
+            'breadcrumb' => [
+                ['label' => 'Portal Instruktur', 'url' => base_url('instruktur')],
+                ['label' => 'Presensi Kehadiran Santri']
+            ],
+            'badge' => 'Lembaga Pendidikan E-RGI Syiar Gemilang',
+            'title' => 'Presensi & Absensi Kelas Kejuruan',
+            'subtitle' => 'Pencatatan presensi real-time, verifikasi kehadiran santri pada sesi teori & praktik, serta rekapitulasi kedisiplinan belajar.',
+            'stats' => [
+                ['icon' => 'fa-solid fa-calendar-check', 'bg' => 'bg-emerald-400/20 text-emerald-200', 'value' => ($rata_kehadiran ?? 95) . '%', 'label' => 'Rata Presensi'],
+                ['icon' => 'fa-solid fa-clock-rotate-left', 'bg' => 'bg-sky-400/20 text-sky-200', 'value' => count($sesi_kehadiran ?? []), 'label' => 'Total Sesi'],
+                ['icon' => 'fa-solid fa-users', 'bg' => 'bg-amber-400/20 text-amber-200', 'value' => count($data_siswa ?? []), 'label' => 'Santri Aktif'],
+            ]
+        ];
+        require_once __DIR__ . '/components/hero_header.php';
+        ?>
+
+        <div class="p-4 sm:p-6 space-y-6">
 
         <!-- Flash Messages -->
         <?php if (session()->getFlashdata('notif_title')): ?>
@@ -205,6 +216,7 @@
             </div>
         </div>
 
+        </div> <!-- /p-4 wrapper -->
     </main>
 </div>
 

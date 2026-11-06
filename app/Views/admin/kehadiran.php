@@ -53,25 +53,34 @@ foreach ($sesi_kehadiran as $s) {
 <div class="flex-1 min-w-0 flex flex-col overflow-hidden bg-[#F8FAFC]">
         
     <!-- Top Navbar -->
-    <header class="h-16 bg-white border-b border-[#E2E8F0] flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
-        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-            <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-2 -ml-1 text-slate-600 hover:text-brand hover:bg-slate-100 rounded-lg transition" aria-label="Buka Menu Navigasi">
-                <i class="fa-solid fa-bars text-lg"></i>
-            </button>
-            <h1 class="text-base sm:text-lg font-bold text-[#1E293B] truncate sg-display"><?= esc($title); ?></h1>
-            <span class="hidden md:inline-flex bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-emerald-100 items-center gap-1 shrink-0">
-                <i class="fa-solid fa-clipboard-user"></i> Riwayat 1 Bulan
-            </span>
-        </div>
-        <div class="flex items-center gap-2 shrink-0">
-            <span class="bg-emerald-50 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full border border-emerald-200 flex items-center gap-1.5 shadow-2xs">
-                <i class="fa-solid fa-calendar-check text-emerald-600"></i> <span class="hidden sm:inline">Tanggal Sistem: </span><?= $todayLabel; ?>
-            </span>
-        </div>
-    </header>
+    <?php 
+    $page_title = $title ?? 'Sesi & Rekap Kehadiran Santri';
+    require_once __DIR__ . '/components/topbar.php'; 
+    ?>
 
     <!-- Main Scrollable Area -->
-    <main class="flex-1 overflow-y-auto p-6 space-y-6">
+    <main class="flex-1 overflow-y-auto pb-16">
+
+        <!-- ===================== HERO WAVE BANNER ===================== -->
+        <?php
+        $hero = [
+            'breadcrumb' => [
+                ['label' => 'Portal Admin', 'url' => base_url('admin')],
+                ['label' => 'Sesi & Rekap Kehadiran']
+            ],
+            'badge' => 'Lembaga Pendidikan E-RGI Syiar Gemilang',
+            'title' => 'Sesi & Rekap Kehadiran Santri',
+            'subtitle' => 'Pusat pengelolaan log absensi santri, pembuatan sesi halaqoh/kelas harian, serta analisis persentase kedisiplinan belajar santri.',
+            'stats' => [
+                ['icon' => 'fa-solid fa-calendar-check', 'bg' => 'bg-emerald-400/20 text-emerald-200', 'value' => $rata_kehadiran . '%', 'label' => 'Rata Presensi'],
+                ['icon' => 'fa-solid fa-clock-rotate-left', 'bg' => 'bg-sky-400/20 text-sky-200', 'value' => count($sesi_kehadiran ?? []), 'label' => 'Total Sesi'],
+                ['icon' => 'fa-solid fa-users', 'bg' => 'bg-amber-400/20 text-amber-200', 'value' => $total_siswa, 'label' => 'Santri Aktif'],
+            ]
+        ];
+        require_once __DIR__ . '/components/hero_header.php';
+        ?>
+
+        <div class="p-6 space-y-6">
 
         <!-- Flashdata Notification -->
         <?php if (session()->getFlashdata('notif_msg')) : ?>
@@ -491,6 +500,7 @@ foreach ($sesi_kehadiran as $s) {
             </div>
         </div>
 
+        </div> <!-- /p-6 wrapper -->
     </main>
 </div>
 

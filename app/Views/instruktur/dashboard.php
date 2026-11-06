@@ -3,47 +3,51 @@
 <div class="flex-1 min-w-0 flex flex-col overflow-hidden bg-[#F8FAFC]">
         
     <!-- Top Navbar -->
-    <header class="h-16 bg-white border-b border-[#E2E8F0] flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
-        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-            <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-2 -ml-1 text-slate-600 hover:text-brand hover:bg-slate-100 rounded-lg transition" aria-label="Buka Menu Navigasi">
-                <i class="fa-solid fa-bars text-lg"></i>
-            </button>
-            <h1 class="text-base sm:text-lg font-bold text-[#1E293B] truncate sg-display"><?= esc($title); ?></h1>
-            <span class="hidden md:inline-flex bg-brand-light text-brand text-xs font-semibold px-2.5 py-0.5 rounded-full border border-brand-border items-center gap-1 shrink-0">
-                <i class="fa-solid fa-chalkboard-user"></i> Portal Pengajar / Instruktur
-            </span>
-        </div>
-        <span class="hidden sm:inline-flex bg-brand-light text-brand text-xs font-semibold px-3 py-1 rounded-full border border-brand-border items-center gap-1.5 shrink-0">
-            <i class="fa-solid fa-calendar-days text-brand"></i> Tahun Ajaran: 2026/2027 (Ganjil)
-        </span>
-    </header>
+    <?php 
+    $page_title = $title ?? 'Dashboard Instruktur';
+    require_once __DIR__ . '/components/topbar.php'; 
+    ?>
 
     <!-- Main Scrollable Area -->
-    <main class="flex-1 overflow-y-auto p-6 space-y-6">
-        
-        <!-- Welcome Banner for Instruktur -->
-        <div class="bg-gradient-to-r from-[#073B66] via-brand to-[#0062AE] rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-                <span class="bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full backdrop-blur-sm inline-block mb-2">
-                    <i class="fa-solid fa-hand-wave mr-1"></i> Selamat Datang, <?= esc(session()->get('nama')); ?>
-                </span>
-                <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">Portal Pengelolaan Nilai & Presensi Santri</h2>
-                <p class="text-sky-100 text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
-                    Sebagai Instruktur, Anda berwenang menginput dan memperbarui nilai santri (pelajaran akademik dan adab/akhlaq) serta mengisi presensi kehadiran santri.
-                </p>
-            </div>
-            <div class="flex flex-wrap items-center gap-2.5 shrink-0">
-                <a href="<?= base_url('instruktur/kelas'); ?>" class="px-3.5 py-2.5 bg-white text-brand-deep hover:bg-brand-light rounded-xl font-bold text-xs shadow-md transition flex items-center gap-2">
-                    <i class="fa-solid fa-layer-group text-brand"></i> Nilai per Kelas
-                </a>
-                <a href="<?= base_url('instruktur/nilai'); ?>" class="px-3.5 py-2.5 bg-sky-500 hover:bg-sky-400 text-white rounded-xl font-bold text-xs shadow-md transition flex items-center gap-2">
-                    <i class="fa-solid fa-pen-to-square"></i> Kelola Nilai
-                </a>
-                <a href="<?= base_url('instruktur/kehadiran'); ?>" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-xs shadow-md transition flex items-center gap-2">
-                    <i class="fa-solid fa-clipboard-user"></i> Isi Presensi
-                </a>
-            </div>
+    <main class="flex-1 overflow-y-auto pb-16">
+
+        <!-- ===================== HERO WAVE BANNER ===================== -->
+        <?php
+        ob_start();
+        ?>
+        <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
+            <a href="<?= base_url('instruktur/kelas'); ?>" class="px-3.5 py-2.5 bg-white text-brand-deep hover:bg-brand-light rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5">
+                <i class="fa-solid fa-layer-group text-brand"></i> Nilai per Kelas
+            </a>
+            <a href="<?= base_url('instruktur/nilai'); ?>" class="px-3.5 py-2.5 bg-sky-500/80 hover:bg-sky-500 text-white rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5">
+                <i class="fa-solid fa-pen-to-square"></i> Kelola Nilai
+            </a>
+            <a href="<?= base_url('instruktur/kehadiran'); ?>" class="px-3.5 py-2.5 bg-emerald-600/80 hover:bg-emerald-600 text-white rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5">
+                <i class="fa-solid fa-clipboard-user"></i> Isi Presensi
+            </a>
         </div>
+        <?php
+        $extra_btn = ob_get_clean();
+
+        $hero = [
+            'breadcrumb' => [
+                ['label' => 'Portal Instruktur', 'url' => base_url('instruktur')],
+                ['label' => 'Dashboard Pengajar']
+            ],
+            'badge' => 'Lembaga Pendidikan E-RGI Syiar Gemilang',
+            'title' => 'Portal Pengelolaan Nilai & Presensi Santri',
+            'subtitle' => 'Selamat Datang, <strong>' . esc(session()->get('nama')) . '</strong>! Kelola pencatatan evaluasi akademik 4 mapel, integrasi adab akhlaq 20%, serta presensi kelas kejuruan.',
+            'extra_action' => $extra_btn,
+            'stats' => [
+                ['icon' => 'fa-solid fa-users', 'bg' => 'bg-sky-400/20 text-sky-200', 'value' => $total_siswa, 'label' => 'Santri Dibina'],
+                ['icon' => 'fa-solid fa-chart-line', 'bg' => 'bg-amber-400/20 text-amber-200', 'value' => $rata_rata, 'label' => 'Rata-rata Nilai'],
+                ['icon' => 'fa-solid fa-clipboard-check', 'bg' => 'bg-emerald-400/20 text-emerald-200', 'value' => $rata_kehadiran . '%', 'label' => 'Presensi Santri'],
+            ]
+        ];
+        require_once __DIR__ . '/components/hero_header.php';
+        ?>
+
+        <div class="p-6 space-y-6">
 
         <!-- Summary Stats Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -187,6 +191,7 @@
             </div>
         </div>
 
+        </div> <!-- /p-6 wrapper -->
     </main>
 </div>
 </body>

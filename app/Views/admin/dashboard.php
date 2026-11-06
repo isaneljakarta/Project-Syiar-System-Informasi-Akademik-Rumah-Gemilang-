@@ -41,56 +41,35 @@ $ambangKehadiran = 75;
 <div class="sg-dash flex-1 min-w-0 flex flex-col overflow-hidden bg-[#F8FAFC]">
 
     <!-- ===================== TOP NAVBAR ===================== -->
-    <header class="relative z-20 min-h-[64px] shrink-0 flex items-center justify-between gap-3 border-b border-[#E2E8F0] bg-white px-4 sm:px-6">
-        <div class="flex min-w-0 items-center gap-2 sm:gap-3">
-            <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-2 -ml-1 text-slate-600 hover:text-brand hover:bg-slate-100 rounded-lg transition" aria-label="Buka Menu Navigasi">
-                <i class="fa-solid fa-bars text-lg"></i>
-            </button>
-            <h1 class="sg-display truncate text-lg font-extrabold tracking-tight text-[#1E293B]"><?= esc($title); ?></h1>
-            <span class="hidden xl:inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-[#0066CC]/20 bg-[#0066CC]/10 px-3 py-1 text-xs font-semibold text-[#0052A3]">
-                <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Syiar Gemilang • Portal Akademik
-            </span>
-        </div>
-
-        <div class="flex shrink-0 items-center gap-2 sm:gap-3">
-            <span class="hidden xl:inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg border border-[#0066CC]/20 bg-[#0066CC]/10 px-3.5 py-1.5 text-xs font-semibold text-[#0052A3]">
-                <i class="fa-solid fa-calendar-days" aria-hidden="true"></i> Tahun Ajaran: 2026/2027 (Ganjil)
-            </span>
-
-            <!-- Notifikasi -->
-            <div class="relative">
-                <button type="button" id="sgNotifBtn"
-                        class="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full text-[#475569] transition-colors duration-200 hover:bg-[#0066CC]/10 hover:text-[#0066CC] active:text-[#003E7E]"
-                        aria-label="Notifikasi" aria-haspopup="true" aria-expanded="false" aria-controls="sgNotifPanel">
-                    <i class="fa-regular fa-bell text-lg" aria-hidden="true"></i>
-                </button>
-                <div id="sgNotifPanel" role="region" aria-label="Daftar notifikasi"
-                     class="hidden absolute right-0 top-full z-30 mt-2 w-[min(20rem,calc(100vw-2rem))] rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-[0_12px_32px_-8px_rgba(15,23,42,0.18)]">
-                    <p class="sg-display text-sm font-bold text-[#1E293B]">Notifikasi</p>
-                    <div class="flex flex-col items-center px-2 py-7 text-center">
-                        <span class="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#0066CC]/10 text-[#0066CC]">
-                            <i class="fa-regular fa-bell-slash" aria-hidden="true"></i>
-                        </span>
-                        <p class="text-sm font-semibold text-[#1E293B]">Belum ada notifikasi baru</p>
-                        <p class="mt-1 text-xs leading-relaxed text-[#64748B]">Pemberitahuan akademik akan muncul di sini.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Profil Admin / Instruktur (nama bisa diganti dengan data sesi login) -->
-            <div class="flex items-center gap-3 border-l border-[#E2E8F0] pl-2 sm:pl-3">
-                <span class="sg-display inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0066CC] text-sm font-bold text-white" aria-hidden="true">A</span>
-                <div class="hidden min-w-0 leading-tight sm:block">
-                    <p class="truncate text-sm font-semibold text-[#1E293B]">Administrator</p>
-                    <p class="text-xs text-[#64748B]">Admin / Instruktur</p>
-                </div>
-            </div>
-        </div>
-    </header>
+    <?php 
+    $page_title = $title ?? 'Dashboard Akademik & Kejuruan';
+    require_once __DIR__ . '/components/topbar.php'; 
+    ?>
 
     <!-- ===================== MAIN ===================== -->
-    <main class="flex-1 overflow-y-auto p-4 sm:p-6">
-        <div class="mx-auto w-full max-w-[1400px] space-y-5 sm:space-y-6">
+    <main class="flex-1 overflow-y-auto pb-16">
+
+        <!-- ===================== HERO WAVE BANNER ===================== -->
+        <?php
+        $hero = [
+            'breadcrumb' => [
+                ['label' => 'Portal Admin', 'url' => base_url('admin')],
+                ['label' => 'Dashboard Akademik & Kejuruan']
+            ],
+            'badge' => 'Lembaga Pendidikan E-RGI Syiar Gemilang',
+            'title' => 'Dashboard Akademik & Kejuruan',
+            'subtitle' => 'Pusat komando dan ringkasan eksekutif capaian akademik, presensi santri, serta distribusi 6 jurusan Rumah Gemilang Indonesia.',
+            'stats' => [
+                ['icon' => 'fa-solid fa-users', 'bg' => 'bg-sky-400/20 text-sky-200', 'value' => $total_siswa, 'label' => 'Santri Aktif'],
+                ['icon' => 'fa-solid fa-layer-group', 'bg' => 'bg-emerald-400/20 text-emerald-200', 'value' => count($persentase_jurusan), 'label' => 'Kelas Kejuruan'],
+                ['icon' => 'fa-solid fa-award', 'bg' => 'bg-amber-400/20 text-amber-200', 'value' => $rata_rata, 'label' => 'Rata-rata Nilai'],
+                ['icon' => 'fa-solid fa-clipboard-check', 'bg' => 'bg-indigo-400/20 text-indigo-200', 'value' => $rata_kehadiran . '%', 'label' => 'Rata Presensi'],
+            ]
+        ];
+        require_once __DIR__ . '/components/hero_header.php';
+        ?>
+
+        <div class="mx-auto w-full max-w-[1400px] p-4 sm:p-6 space-y-5 sm:space-y-6">
 
             <!-- Info sistem untuk layar < xl (di xl tampil di header) -->
             <div class="flex flex-wrap items-center gap-2 xl:hidden">
@@ -407,33 +386,6 @@ $ambangKehadiran = 75;
         </div>
     </main>
 </div>
-
-<!-- Popover notifikasi -->
-<script>
-(function () {
-    var btn = document.getElementById('sgNotifBtn');
-    var panel = document.getElementById('sgNotifPanel');
-    if (!btn || !panel) return;
-
-    function setOpen(open) {
-        panel.classList.toggle('hidden', !open);
-        btn.setAttribute('aria-expanded', String(open));
-    }
-    btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        setOpen(panel.classList.contains('hidden'));
-    });
-    document.addEventListener('click', function (e) {
-        if (!panel.contains(e.target)) setOpen(false);
-    });
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && !panel.classList.contains('hidden')) {
-            setOpen(false);
-            btn.focus();
-        }
-    });
-})();
-</script>
 
 <!-- Chart.js Doughnut Script untuk Persentase Jurusan -->
 <script>

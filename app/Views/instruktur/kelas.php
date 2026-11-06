@@ -61,97 +61,39 @@
 <div class="flex-1 min-w-0 flex flex-col overflow-hidden bg-[#F8FAFC]">
         
     <!-- Top Header Bar -->
-    <header class="h-16 bg-white border-b border-[#E2E8F0] flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
-        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-            <!-- Mobile Hamburger Toggle Button -->
-            <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-2 -ml-1 text-slate-600 hover:text-brand hover:bg-slate-100 rounded-lg transition" aria-label="Buka Menu Navigasi">
-                <i class="fa-solid fa-bars text-lg"></i>
-            </button>
-            <h1 class="text-base sm:text-lg font-bold text-[#1E293B] truncate sg-display"><?= esc($title); ?></h1>
-            <span class="hidden md:inline-flex bg-brand-light text-brand text-xs font-semibold px-2.5 py-0.5 rounded-full border border-brand-border items-center gap-1 shrink-0">
-                <i class="fa-solid fa-layer-group"></i> Pemisah Nilai per Kelas & 4 Mapel
-            </span>
-        </div>
-        <div class="flex items-center gap-2 sm:gap-2.5 shrink-0">
-            <span class="hidden sm:inline-flex bg-brand-light text-brand text-xs font-semibold px-3 py-1 rounded-full border border-brand-border items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>Tahun Ajaran: 2026/2027</span>
-            </span>
-            <a href="<?= base_url('instruktur/nilai'); ?>" class="inline-flex px-3 py-1.5 bg-[#0066CC] hover:bg-[#0052A3] text-white rounded-xl text-xs font-bold shadow-xs transition items-center gap-1.5">
-                <i class="fa-solid fa-pen-to-square"></i> <span class="hidden sm:inline">Input / Update Nilai</span><span class="sm:hidden">Nilai</span>
-            </a>
-        </div>
-    </header>
+    <?php 
+    $page_title = $title ?? 'Data Nilai per Kelas';
+    ob_start();
+    ?>
+    <a href="<?= base_url('instruktur/nilai'); ?>" class="inline-flex px-3 py-1.5 bg-[#0066CC] hover:bg-[#0052A3] text-white rounded-xl text-xs font-bold shadow-xs transition items-center gap-1.5">
+        <i class="fa-solid fa-pen-to-square"></i> <span class="hidden sm:inline">Input / Update Nilai</span><span class="sm:hidden">Nilai</span>
+    </a>
+    <?php
+    $topbar_extra_right = ob_get_clean();
+    require_once __DIR__ . '/components/topbar.php'; 
+    ?>
 
     <!-- Main Scrollable Area -->
     <main class="flex-1 overflow-y-auto pb-16">
 
         <!-- ================= HERO WAVE BANNER (E-RGI STYLE) ================= -->
-        <section class="hero-wave-pattern text-white px-4 sm:px-6 lg:px-10 py-8 sm:py-12 relative overflow-hidden shadow-md">
-            <!-- Elemen Aksen Grafis Abstrak Blur -->
-            <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-white/5 blur-2xl pointer-events-none"></div>
-            <div class="absolute right-1/4 -bottom-24 w-96 h-96 rounded-full bg-sky-400/10 blur-3xl pointer-events-none"></div>
-
-            <div class="max-w-7xl mx-auto relative z-10">
-                <!-- Breadcrumb navigation -->
-                <nav class="flex items-center space-x-2 text-xs sm:text-sm text-sky-100 font-medium mb-3">
-                    <a href="<?= base_url('instruktur'); ?>" class="hover:text-white transition flex items-center gap-1.5 opacity-90 hover:opacity-100">
-                        <i class="fa-solid fa-house text-xs"></i>
-                        <span>Portal Instruktur</span>
-                    </a>
-                    <span class="opacity-60 text-xs">/</span>
-                    <span class="text-white font-semibold">Pemisah Nilai per Kelas</span>
-                </nav>
-
-                <!-- Banner Title & Stats Counters -->
-                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                    <div>
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-sky-100 mb-2">
-                            <i class="fa-solid fa-graduation-cap text-sky-300"></i> Lembaga Pendidikan E-RGI Syiar Gemilang
-                        </div>
-                        <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-white drop-shadow-xs sg-display">
-                            Pemisah & Analisis Nilai per Kelas
-                        </h1>
-                        <p class="text-sky-100 text-xs sm:text-sm mt-2 max-w-2xl font-light leading-relaxed">
-                            Pemisah informasi capaian nilai santri berdasarkan 6 kelas kejuruan terdaftar. Analisis komprehensif performa 4 mata pelajaran utama serta integrasi bobot 20% adab & akhlaq karimah.
-                        </p>
-                    </div>
-
-                    <!-- Counter Badges Banner -->
-                    <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 self-start md:self-auto shrink-0">
-                        <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-white/20 shadow-xs">
-                            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-sky-400/20 flex items-center justify-center text-sky-200">
-                                <i class="fa-solid fa-users text-base sm:text-lg"></i>
-                            </div>
-                            <div>
-                                <span class="block text-lg sm:text-xl font-bold text-white leading-none"><?= esc($total_siswa); ?></span>
-                                <span class="text-3xs sm:text-2xs text-sky-100 font-medium">Santri Terdaftar</span>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-white/20 shadow-xs">
-                            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-emerald-400/20 flex items-center justify-center text-emerald-200">
-                                <i class="fa-solid fa-layer-group text-base sm:text-lg"></i>
-                            </div>
-                            <div>
-                                <span class="block text-lg sm:text-xl font-bold text-white leading-none"><?= esc($total_kelas); ?></span>
-                                <span class="text-3xs sm:text-2xs text-sky-100 font-medium">Kelas Kejuruan</span>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-white/20 shadow-xs">
-                            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-amber-400/20 flex items-center justify-center text-amber-200">
-                                <i class="fa-solid fa-chart-line text-base sm:text-lg"></i>
-                            </div>
-                            <div>
-                                <span class="block text-lg sm:text-xl font-bold text-white leading-none"><?= esc($rata_rata); ?></span>
-                                <span class="text-3xs sm:text-2xs text-sky-100 font-medium">Rata-rata Nilai</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <?php
+        $hero = [
+            'breadcrumb' => [
+                ['label' => 'Portal Instruktur', 'url' => base_url('instruktur')],
+                ['label' => 'Pemisah Nilai per Kelas']
+            ],
+            'badge' => 'Lembaga Pendidikan E-RGI Syiar Gemilang',
+            'title' => 'Pemisah & Analisis Nilai per Kelas',
+            'subtitle' => 'Pemisah informasi capaian nilai santri berdasarkan 6 kelas kejuruan terdaftar. Analisis komprehensif performa 4 mata pelajaran utama serta integrasi bobot 20% adab & akhlaq karimah.',
+            'stats' => [
+                ['icon' => 'fa-solid fa-users', 'bg' => 'bg-sky-400/20 text-sky-200', 'value' => $total_siswa, 'label' => 'Santri Terdaftar'],
+                ['icon' => 'fa-solid fa-layer-group', 'bg' => 'bg-emerald-400/20 text-emerald-200', 'value' => $total_kelas, 'label' => 'Kelas Kejuruan'],
+                ['icon' => 'fa-solid fa-chart-line', 'bg' => 'bg-amber-400/20 text-amber-200', 'value' => $rata_rata, 'label' => 'Rata-rata Nilai'],
+            ]
+        ];
+        require_once __DIR__ . '/components/hero_header.php';
+        ?>
 
         <!-- ================= CARD UNTUK 4 MAPEL YANG ADA (+ ADAB 20%) ================= -->
         <section class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8">

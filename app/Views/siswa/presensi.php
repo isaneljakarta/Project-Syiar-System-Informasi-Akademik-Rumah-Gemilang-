@@ -15,23 +15,34 @@ $myKelasBadge = $jurusanColors[$santri['kelas']]['badge'] ?? 'bg-blue-50 text-bl
 <div class="flex-1 min-w-0 flex flex-col overflow-hidden bg-[#F8FAFC]">
         
     <!-- Top Navbar -->
-    <header class="h-16 bg-white border-b border-[#E2E8F0] flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
-        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-            <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-2 -ml-1 text-slate-600 hover:text-brand hover:bg-slate-100 rounded-lg transition" aria-label="Buka Menu Navigasi">
-                <i class="fa-solid fa-bars text-lg"></i>
-            </button>
-            <h1 class="text-base sm:text-lg font-bold text-[#1E293B] truncate sg-display"><?= esc($title); ?></h1>
-            <span class="hidden sm:inline-flex bg-brand-light text-brand text-xs font-semibold px-2.5 py-0.5 rounded-full border border-brand-border items-center gap-1 shrink-0">
-                <i class="fa-solid fa-clipboard-check"></i> Presensi Mandiri
-            </span>
-        </div>
-        <span class="hidden sm:inline-flex text-xs text-slate-500 font-medium">
-            <i class="fa-solid fa-calendar-day text-brand mr-1"></i> Tanggal: <?= date('d M Y'); ?>
-        </span>
-    </header>
+    <?php 
+    $page_title = $title ?? 'Presensi Mandiri';
+    require_once __DIR__ . '/components/topbar.php'; 
+    ?>
 
     <!-- Main Content -->
-    <main class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+    <main class="flex-1 overflow-y-auto pb-16">
+
+        <!-- ===================== HERO WAVE BANNER ===================== -->
+        <?php
+        $hero = [
+            'breadcrumb' => [
+                ['label' => 'Portal Santri', 'url' => base_url('siswa')],
+                ['label' => 'Presensi Mandiri']
+            ],
+            'badge' => 'Lembaga Pendidikan E-RGI Syiar Gemilang',
+            'title' => 'Presensi & Kehadiran Mandiri Santri',
+            'subtitle' => 'Formulir pencatatan absensi harian santri, verifikasi kehadiran sesi pembelajaran kejuruan, dan riwayat presensi mandiri.',
+            'stats' => [
+                ['icon' => 'fa-solid fa-user-check', 'bg' => 'bg-emerald-400/20 text-emerald-200', 'value' => ($my_rekap['count_hadir'] ?? 0) . ' Sesi', 'label' => 'Hadir Tepat Waktu'],
+                ['icon' => 'fa-solid fa-clock', 'bg' => 'bg-amber-400/20 text-amber-200', 'value' => ($my_rekap['count_telat'] ?? 0) . ' Sesi', 'label' => 'Terlambat'],
+                ['icon' => 'fa-solid fa-clipboard-list', 'bg' => 'bg-sky-400/20 text-sky-200', 'value' => count($my_logs ?? []) . ' Log', 'label' => 'Total Riwayat'],
+            ]
+        ];
+        require_once __DIR__ . '/components/hero_header.php';
+        ?>
+
+        <div class="p-4 sm:p-6 space-y-6">
 
         <!-- Flash Messages -->
         <?php if (session()->getFlashdata('notif_title')): ?>
@@ -203,6 +214,7 @@ $myKelasBadge = $jurusanColors[$santri['kelas']]['badge'] ?? 'bg-blue-50 text-bl
 
         </div>
 
+        </div> <!-- /p-4 wrapper -->
     </main>
 </div>
 </body>

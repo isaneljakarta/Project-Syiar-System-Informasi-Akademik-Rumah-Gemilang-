@@ -15,50 +15,50 @@ $myKelasBadge = $jurusanColors[$santri['kelas']]['badge'] ?? 'bg-blue-50 text-bl
 <div class="flex-1 min-w-0 flex flex-col overflow-hidden bg-[#F8FAFC]">
         
     <!-- Top Navbar -->
-    <header class="h-16 bg-white border-b border-[#E2E8F0] flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
-        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-            <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-2 -ml-1 text-slate-600 hover:text-brand hover:bg-slate-100 rounded-lg transition" aria-label="Buka Menu Navigasi">
-                <i class="fa-solid fa-bars text-lg"></i>
-            </button>
-            <h1 class="text-base sm:text-lg font-bold text-[#1E293B] truncate sg-display"><?= esc($title); ?></h1>
-            <span class="hidden sm:inline-flex bg-brand-light text-brand text-xs font-semibold px-2.5 py-0.5 rounded-full border border-brand-border items-center gap-1 shrink-0">
-                <i class="fa-solid fa-user-graduate"></i> Portal Santri Mandiri
-            </span>
-        </div>
-        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border <?= $myKelasBadge; ?>">
-            <i class="fa-solid fa-graduation-cap mr-1.5"></i> <?= esc($santri['kelas']); ?>
-        </span>
-    </header>
+    <?php 
+    $page_title = $title ?? 'Dashboard Santri';
+    ob_start();
+    ?>
+    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border <?= $myKelasBadge; ?>">
+        <i class="fa-solid fa-graduation-cap mr-1.5"></i> <?= esc($santri['kelas']); ?>
+    </span>
+    <?php
+    $topbar_extra_right = ob_get_clean();
+    require_once __DIR__ . '/components/topbar.php'; 
+    ?>
 
     <!-- Main Content -->
-    <main class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+    <main class="flex-1 overflow-y-auto pb-16">
 
-        <!-- Student Hero Profile Card -->
-        <div class="bg-gradient-to-r from-[#073B66] via-brand to-[#0062AE] rounded-2xl p-6 text-white shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-5">
-            <div class="flex items-center gap-4">
-                <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl font-bold border border-white/30 shrink-0 shadow-inner">
-                    <i class="fa-solid fa-user-graduate"></i>
-                </div>
-                <div>
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="bg-white/20 text-white text-3xs font-bold px-2 py-0.5 rounded-full border border-white/30">
-                            SANTRI AKTIF
-                        </span>
-                        <span class="bg-amber-400/30 text-amber-200 text-3xs font-bold px-2 py-0.5 rounded-full border border-amber-300/30">
-                            <i class="fa-solid fa-trophy mr-1"></i> Peringkat ke-<?= $rank; ?> dari <?= $total_siswa; ?>
-                        </span>
-                    </div>
-                    <h2 class="text-xl sm:text-2xl font-black"><?= esc($santri['nama']); ?></h2>
-                    <p class="text-sky-100 text-xs mt-0.5"><?= esc($santri['kelas']); ?> &bull; ID Santri: #<?= esc($santri['id']); ?></p>
-                </div>
-            </div>
+        <!-- ===================== HERO WAVE BANNER ===================== -->
+        <?php
+        ob_start();
+        ?>
+        <a href="<?= base_url('siswa/presensi'); ?>" class="px-3.5 py-2.5 bg-white text-brand-deep hover:bg-brand-light rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5 shrink-0">
+            <i class="fa-solid fa-clipboard-user text-brand"></i> Presensi Saya
+        </a>
+        <?php
+        $extra_presensi = ob_get_clean();
 
-            <div class="flex items-center gap-3 shrink-0 self-end md:self-auto">
-                <a href="<?= base_url('siswa/presensi'); ?>" class="px-4 py-2.5 bg-white text-brand-deep hover:bg-brand-light rounded-xl font-bold text-xs shadow-md transition flex items-center gap-2">
-                    <i class="fa-solid fa-clipboard-user text-brand"></i> Isi Presensi Saya
-                </a>
-            </div>
-        </div>
+        $hero = [
+            'breadcrumb' => [
+                ['label' => 'Portal Santri', 'url' => base_url('siswa')],
+                ['label' => 'Dashboard Mandiri']
+            ],
+            'badge' => 'Lembaga Pendidikan E-RGI Syiar Gemilang',
+            'title' => 'Portal Belajar & Capaian: ' . esc($santri['nama']),
+            'subtitle' => 'ID Santri: #' . esc($santri['id']) . ' &bull; Jurusan: ' . esc($santri['kelas']) . '. Pantau rekapitulasi nilai 4 mapel kejuruan, penilaian adab akhlaq, serta catatan kehadiran mandiri.',
+            'extra_action' => $extra_presensi,
+            'stats' => [
+                ['icon' => 'fa-solid fa-graduation-cap', 'bg' => 'bg-sky-400/20 text-sky-200', 'value' => esc($santri['kelas']), 'label' => 'Kelas Kejuruan'],
+                ['icon' => 'fa-solid fa-trophy', 'bg' => 'bg-amber-400/20 text-amber-200', 'value' => '#' . ($rank ?? '-'), 'label' => 'Peringkat Kelas'],
+                ['icon' => 'fa-solid fa-calendar-check', 'bg' => 'bg-emerald-400/20 text-emerald-200', 'value' => esc($santri['kehadiran']) . '%', 'label' => 'Kehadiran Anda'],
+            ]
+        ];
+        require_once __DIR__ . '/components/hero_header.php';
+        ?>
+
+        <div class="p-4 sm:p-6 space-y-6">
 
         <!-- Grade Summary & Final Score -->
         <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
@@ -219,6 +219,7 @@ $myKelasBadge = $jurusanColors[$santri['kelas']]['badge'] ?? 'bg-blue-50 text-bl
             </div>
         </div>
 
+        </div> <!-- /p-4 wrapper -->
     </main>
 </div>
 </body>

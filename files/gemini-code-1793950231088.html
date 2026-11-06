@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda - SIA Syiar Gemilang | Rumah Gemilang Indonesia</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+                    colors: {
+                        brand: { DEFAULT: '#0077D4', dark: '#0062AE', deep: '#073B66' }
+                    }
+                }
+            }
+        };
+    </script>
+    <!-- FontAwesome 6.4 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+
+        .video-overlay {
+            background: linear-gradient(
+                160deg,
+                rgba(7, 59, 102, 0.85) 0%,
+                rgba(0, 119, 212, 0.65) 50%,
+                rgba(4, 30, 56, 0.92) 100%
+            );
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand selection:text-white">
+
+    <!-- ===================== NAVBAR ===================== -->
+    <header class="fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-brand text-white shadow-md shadow-brand/25 group-hover:bg-brand-dark transition">
+                    <i class="fa-solid fa-graduation-cap text-lg"></i>
+                </div>
+                <div class="leading-tight">
+                    <p class="text-lg font-extrabold tracking-tight text-slate-900">Syiar Gemilang</p>
+                    <p class="text-[11px] font-medium text-slate-500">SIA Rumah Gemilang Indonesia</p>
+                </div>
+            </a>
+
+            <!-- Desktop Menu -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                <a href="#beranda" class="text-brand font-semibold">Beranda</a>
+                <a href="#fitur" class="hover:text-brand transition">Fitur Portal</a>
+                <a href="#program" class="hover:text-brand transition">Program Kelas</a>
+                <a href="#pengumuman" class="hover:text-brand transition">Pengumuman</a>
+            </nav>
+
+            <!-- Action Button -->
+            <div class="hidden md:flex items-center gap-3">
+                <a href="<?= function_exists('base_url') ? base_url('/login') : 'login.php'; ?>" 
+                   class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-brand hover:bg-brand-dark text-white font-semibold text-sm shadow-sm shadow-brand/20 transition">
+                    <i class="fa-solid fa-right-to-bracket text-xs"></i>
+                    <span>Masuk Portal</span>
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button type="button" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" 
+                    class="md:hidden inline-flex items-center justify-center p-2.5 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-200 px-6 py-4 space-y-3">
+            <a href="#beranda" class="block py-2 text-sm font-semibold text-brand">Beranda</a>
+            <a href="#fitur" class="block py-2 text-sm font-medium text-slate-600 hover:text-brand">Fitur Portal</a>
+            <a href="#program" class="block py-2 text-sm font-medium text-slate-600 hover:text-brand">Program Kelas</a>
+            <a href="#pengumuman" class="block py-2 text-sm font-medium text-slate-600 hover:text-brand">Pengumuman</a>
+            <div class="pt-2 border-t border-slate-100">
+                <a href="<?= function_exists('base_url') ? base_url('/login') : 'login.php'; ?>" 
+                   class="w-full py-2.5 px-4 bg-brand text-white font-semibold rounded-lg text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket text-xs"></i>
+                    <span>Masuk Portal</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===================== HERO SECTION (VIDEO BACKGROUND) ===================== -->
+    <section id="beranda" class="relative min-h-[92vh] flex items-center pt-20 overflow-hidden bg-brand-deep text-white">
+        <!-- Video Background -->
+        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+            <source src="walkthrough.mp4" type="video/mp4">
+        </video>
+
+        <!-- Brand Gradient Overlay -->
+        <div class="video-overlay absolute inset-0 z-10"></div>
+
+        <!-- Hero Content -->
+        <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 w-full">
+            <div class="max-w-3xl">
+                <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-xs sm:text-sm font-medium mb-6">
+                    <span class="w-2 h-2 rounded-full bg-sky-300 animate-ping"></span>
+                    <span>Sistem Informasi Akademik Terpadu</span>
+                </div>
+
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15]">
+                    Belajar, mengajar, dan mengelola akademik dalam satu portal.
+                </h1>
+
+                <p class="mt-6 text-base sm:text-lg text-white/85 leading-relaxed max-w-2xl">
+                    Pantau nilai dan absensi, kelola jadwal kelas, serta atur data santri dan instruktur dengan mudah, transparan, dan terintegrasi di Rumah Gemilang Indonesia.
+                </p>
+
+                <div class="mt-8 flex flex-wrap items-center gap-4">
+                    <a href="<?= function_exists('base_url') ? base_url('/login') : 'login.php'; ?>" 
+                       class="px-7 py-3.5 rounded-lg bg-brand hover:bg-brand-dark text-white font-semibold text-sm shadow-lg shadow-brand/30 transition flex items-center gap-2.5">
+                        <span>Masuk ke Sistem</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                    <a href="#fitur" 
+                       class="px-7 py-3.5 rounded-lg bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/25 text-white font-semibold text-sm transition flex items-center gap-2.5">
+                        <i class="fa-solid fa-compass text-sm"></i>
+                        <span>Pelajari Fitur</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Statistik Singkat di Bawah Hero -->
+            <div class="mt-16 pt-10 border-t border-white/15 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
+                <div>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white">2.500+</p>
+                    <p class="mt-1 text-xs sm:text-sm text-white/75">Santri & Alumni Terdata</p>
+                </div>
+                <div>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white">6+</p>
+                    <p class="mt-1 text-xs sm:text-sm text-white/75">Jurusan Pelatihan Vokasi</p>
+                </div>
+                <div>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white">99.8%</p>
+                    <p class="mt-1 text-xs sm:text-sm text-white/75">Presensi & Nilai Real-time</p>
+                </div>
+                <div>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white">24/7</p>
+                    <p class="mt-1 text-xs sm:text-sm text-white/75">Akses Portal Akademik</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== FITUR PORTAL SECTION ===================== -->
+    <section id="fitur" class="py-20 lg:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-xs font-bold uppercase tracking-wider text-brand bg-brand/10 px-3 py-1 rounded-full">
+                    Layanan Akademik
+                </span>
+                <h2 class="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
+                    Semua Kebutuhan Akademik dalam Genggaman
+                </h2>
+                <p class="mt-3 text-sm sm:text-base text-slate-500">
+                    Dirancang khusus untuk memudahkan santri, instruktur, dan manajemen Rumah Gemilang Indonesia dalam menjalankan kegiatan belajar mengajar.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-brand/40 hover:shadow-lg hover:shadow-brand/5 transition group">
+                    <div class="w-12 h-12 rounded-xl bg-brand/10 text-brand flex items-center justify-center mb-5 group-hover:bg-brand group-hover:text-white transition">
+                        <i class="fa-solid fa-clipboard-user text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Absensi Kehadiran</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Pencatatan kehadiran harian santri secara *real-time* di setiap sesi kelas dan kegiatan pembinaan.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-brand/40 hover:shadow-lg hover:shadow-brand/5 transition group">
+                    <div class="w-12 h-12 rounded-xl bg-brand/10 text-brand flex items-center justify-center mb-5 group-hover:bg-brand group-hover:text-white transition">
+                        <i class="fa-solid fa-chart-line text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Monitoring Nilai & Evaluasi</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Transparansi nilai tugas, ujian praktik, dan rapor akhir santri yang dapat diakses kapan saja.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-brand/40 hover:shadow-lg hover:shadow-brand/5 transition group">
+                    <div class="w-12 h-12 rounded-xl bg-brand/10 text-brand flex items-center justify-center mb-5 group-hover:bg-brand group-hover:text-white transition">
+                        <i class="fa-solid fa-calendar-days text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Jadwal Kelas & Materi</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Pengelolaan jadwal pelajaran, ruangan, instruktur pengampu, serta distribusi modul pembelajaran.
+                    </p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:border-brand/40 hover:shadow-lg hover:shadow-brand/5 transition group">
+                    <div class="w-12 h-12 rounded-xl bg-brand/10 text-brand flex items-center justify-center mb-5 group-hover:bg-brand group-hover:text-white transition">
+                        <i class="fa-solid fa-users-gear text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Manajemen Data Santri</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        Pusat pangkalan data Nomor Induk Santri (NIS), profil angkatan, hingga riwayat kelulusan.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== PROGRAM PELATIHAN / JURUSAN SECTION ===================== -->
+    <section id="program" class="py-20 lg:py-24 bg-slate-50 border-y border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-brand bg-brand/10 px-3 py-1 rounded-full">
+                        Bidang Keahlian
+                    </span>
+                    <h2 class="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
+                        Program Kelas Rumah Gemilang Indonesia
+                    </h2>
+                </div>
+                <p class="text-sm text-slate-500 max-w-md">
+                    Seluruh kelas terintegrasi dengan kurikulum vokasi dan pembinaan karakter di dalam SIA Syiar Gemilang.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Jurusan 1 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition flex items-start gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-brand-deep text-white flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-code text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900">Rekayasa Perangkat Lunak & Aplikasi</h3>
+                        <p class="mt-1 text-xs text-slate-500 leading-relaxed">Pemrograman web, basis data, dan pengembangan sistem informasi modern.</p>
+                    </div>
+                </div>
+
+                <!-- Jurusan 2 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition flex items-start gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-brand-deep text-white flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-pen-nib text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900">Desain Grafis</h3>
+                        <p class="mt-1 text-xs text-slate-500 leading-relaxed">Komunikasi visual, ilustrasi digital, branding, dan tata letak media cetak/digital.</p>
+                    </div>
+                </div>
+
+                <!-- Jurusan 3 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition flex items-start gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-brand-deep text-white flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-camera-retro text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900">Fotografi & Videografi</h3>
+                        <p class="mt-1 text-xs text-slate-500 leading-relaxed">Produksi konten audiovisual, sinematografi, dan penyuntingan video profesional.</p>
+                    </div>
+                </div>
+
+                <!-- Jurusan 4 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition flex items-start gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-brand-deep text-white flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-network-wired text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900">Teknik Komputer & Jaringan</h3>
+                        <p class="mt-1 text-xs text-slate-500 leading-relaxed">Perakitan perangkat keras, administrasi server, dan infrastruktur jaringan.</p>
+                    </div>
+                </div>
+
+                <!-- Jurusan 5 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition flex items-start gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-brand-deep text-white flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-scissors text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900">Tata Busana</h3>
+                        <p class="mt-1 text-xs text-slate-500 leading-relaxed">Pembuatan pola, teknik menjahit busana muslim, dan manajemen produksi garmen.</p>
+                    </div>
+                </div>
+
+                <!-- Jurusan 6 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition flex items-start gap-4">
+                    <div class="w-11 h-11 rounded-xl bg-brand-deep text-white flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-mosque text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900">Pembinaan Karakter & Syiar</h3>
+                        <p class="mt-1 text-xs text-slate-500 leading-relaxed">Tahsin Al-Qur'an, adab keseharian, kepemimpinan, dan kemandirian santri.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== PENGUMUMAN & CTA SECTION ===================== -->
+    <section id="pengumuman" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="rounded-3xl bg-gradient-to-br from-brand-deep via-[#054c85] to-brand p-8 sm:p-12 lg:p-16 text-white shadow-xl relative overflow-hidden">
+                <div class="max-w-2xl relative z-10">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-semibold mb-4">
+                        <i class="fa-solid fa-bullhorn"></i>
+                        <span>Akses Portal SIA</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-4xl font-bold tracking-tight leading-tight">
+                        Sudah punya akun santri atau instruktur?
+                    </h2>
+                    <p class="mt-3 text-sm sm:text-base text-white/85 leading-relaxed">
+                        Gunakan Nomor Induk Santri (NIS) atau *username* Anda untuk masuk ke dashboard akademik, melihat jadwal terbaru, dan mengunduh materi kelas.
+                    </p>
+                    <div class="mt-7 flex flex-wrap gap-4">
+                        <a href="<?= function_exists('base_url') ? base_url('/login') : 'login.php'; ?>" 
+                           class="px-6 py-3 rounded-lg bg-white text-brand-deep hover:bg-slate-100 font-bold text-sm shadow-sm transition inline-flex items-center gap-2">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                            <span>Masuk Sekarang</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Ornamen Ikon Latar -->
+                <i class="fa-solid fa-graduation-cap text-[12rem] text-white/5 absolute -right-6 -bottom-8 pointer-events-none select-none"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 pb-8 border-b border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-brand text-white shrink-0">
+                        <i class="fa-solid fa-graduation-cap text-base"></i>
+                    </div>
+                    <div>
+                        <p class="text-base font-bold text-white">Syiar Gemilang</p>
+                        <p class="text-xs text-slate-400">Sistem Informasi Akademik Rumah Gemilang Indonesia</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-6 text-xs font-medium">
+                    <a href="#beranda" class="hover:text-white transition">Beranda</a>
+                    <a href="#fitur" class="hover:text-white transition">Fitur Portal</a>
+                    <a href="#program" class="hover:text-white transition">Program Kelas</a>
+                    <a href="<?= function_exists('base_url') ? base_url('/login') : 'login.php'; ?>" class="hover:text-white transition">Halaman Login</a>
+                </div>
+            </div>
+
+            <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs gap-4">
+                <p>Copyright &copy; Syiar Gemilang 2026. Rumah Gemilang Indonesia. All rights reserved.</p>
+                <p class="text-slate-500">
+                    <span class="font-semibold text-slate-300">Indonesia</span>
+                    <span class="mx-1.5">|</span>
+                    <span lang="en">English</span>
+                    <span class="mx-1.5">|</span>
+                    <span lang="ar" dir="rtl">العربية</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

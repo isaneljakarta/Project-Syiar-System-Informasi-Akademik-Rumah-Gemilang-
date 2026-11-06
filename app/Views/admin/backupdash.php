@@ -3,20 +3,34 @@
 <div class="flex-1 flex flex-col overflow-hidden">
         
     <!-- Top Navbar -->
-    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 z-10 shrink-0">
-        <div class="flex items-center gap-3">
-            <h1 class="text-lg font-bold text-slate-800"><?= esc($title); ?></h1>
-            <span class="hidden sm:inline-flex bg-indigo-50 text-indigo-700 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-indigo-100 items-center gap-1">
-                <i class="fa-solid fa-graduation-cap"></i> Portal Manajemen Nilai & Presensi
-            </span>
-        </div>
-        <span class="bg-indigo-50 text-indigo-700 text-xs font-semibold px-3 py-1 rounded-full border border-indigo-100 flex items-center gap-1.5">
-            <i class="fa-solid fa-calendar-days"></i> Tahun Ajaran: 2026/2027 (Ganjil)
-        </span>
-    </header>
+    <?php 
+    $page_title = $title ?? 'Dashboard';
+    require_once __DIR__ . '/components/topbar.php'; 
+    ?>
 
     <!-- Main Scrollable Area -->
-    <main class="flex-1 overflow-y-auto p-6 space-y-6">
+    <main class="flex-1 overflow-y-auto pb-16">
+
+        <!-- ===================== HERO WAVE BANNER ===================== -->
+        <?php
+        $hero = [
+            'breadcrumb' => [
+                ['label' => 'Portal Admin', 'url' => base_url('admin')],
+                ['label' => 'Dashboard']
+            ],
+            'badge' => 'Lembaga Pendidikan E-RGI Syiar Gemilang',
+            'title' => 'Dashboard Akademik & Kejuruan',
+            'subtitle' => 'Pusat komando dan ringkasan eksekutif performa akademik, kehadiran santri, dan distribusi kejuruan Rumah Gemilang Indonesia.',
+            'stats' => [
+                ['icon' => 'fa-solid fa-users', 'bg' => 'bg-sky-400/20 text-sky-200', 'value' => $total_siswa, 'label' => 'Total Santri'],
+                ['icon' => 'fa-solid fa-book-open', 'bg' => 'bg-emerald-400/20 text-emerald-200', 'value' => $total_mapel . ' Aspek', 'label' => 'Aspek Penilaian'],
+                ['icon' => 'fa-solid fa-award', 'bg' => 'bg-amber-400/20 text-amber-200', 'value' => $rata_rata, 'label' => 'Rata-rata Nilai'],
+            ]
+        ];
+        require_once __DIR__ . '/components/hero_header.php';
+        ?>
+
+        <div class="p-6 space-y-6">
         
         <!-- Summary Stats Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -237,6 +251,7 @@
             </div>
         </div>
 
+        </div> <!-- /p-6 wrapper -->
     </main>
 </div>
 

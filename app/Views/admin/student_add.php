@@ -3,23 +3,35 @@
 <div class="flex-1 min-w-0 flex flex-col overflow-hidden bg-[#F8FAFC]">
 
     <!-- Top Navbar -->
-    <header class="h-16 bg-white border-b border-[#E2E8F0] flex items-center justify-between px-4 sm:px-6 z-10 shrink-0">
-        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-            <button type="button" onclick="toggleMobileSidebar()" class="lg:hidden p-2 -ml-1 text-slate-600 hover:text-brand hover:bg-slate-100 rounded-lg transition" aria-label="Buka Menu Navigasi">
-                <i class="fa-solid fa-bars text-lg"></i>
-            </button>
-            <h1 class="text-base sm:text-lg font-bold text-[#1E293B] truncate sg-display"><?= esc($title); ?></h1>
-            <span class="hidden md:inline-flex bg-brand-light text-brand text-xs font-semibold px-2.5 py-0.5 rounded-full border border-brand-border items-center gap-1 shrink-0">
-                <i class="fa-solid fa-user-plus"></i> Formulir Santri Baru
-            </span>
-        </div>
-        <span class="hidden sm:inline-flex bg-brand-light text-brand text-xs font-semibold px-3 py-1 rounded-full border border-brand-border items-center gap-1.5 shrink-0">
-            <i class="fa-solid fa-calendar-days"></i> Tahun Ajaran: 2026/2027 (Ganjil)
-        </span>
-    </header>
+    <?php 
+    $page_title = $title ?? 'Tambah Data Santri';
+    require_once __DIR__ . '/components/topbar.php'; 
+    ?>
 
     <!-- Main Scrollable Area -->
-    <main class="flex-1 overflow-y-auto p-6">
+    <main class="flex-1 overflow-y-auto pb-16">
+
+        <!-- ===================== HERO WAVE BANNER ===================== -->
+        <?php
+        $hero = [
+            'breadcrumb' => [
+                ['label' => 'Portal Admin', 'url' => base_url('admin')],
+                ['label' => 'Data Santri', 'url' => base_url('admin/data')],
+                ['label' => 'Tambah Santri']
+            ],
+            'badge' => 'Lembaga Pendidikan E-RGI Syiar Gemilang',
+            'title' => 'Formulir Pendaftaran Santri Baru',
+            'subtitle' => 'Registrasi identitas santri baru, penempatan kelas kejuruan, serta input skor awal aspek akademik dan adab akhlaq karimah.',
+            'stats' => [
+                ['icon' => 'fa-solid fa-user-plus', 'bg' => 'bg-sky-400/20 text-sky-200', 'value' => 'Baru', 'label' => 'Formulir Santri'],
+                ['icon' => 'fa-solid fa-layer-group', 'bg' => 'bg-emerald-400/20 text-emerald-200', 'value' => '6 Kelas', 'label' => 'Pilihan Kejuruan'],
+                ['icon' => 'fa-solid fa-scale-balanced', 'bg' => 'bg-amber-400/20 text-amber-200', 'value' => '80:20', 'label' => 'Bobot Nilai:Adab'],
+            ]
+        ];
+        require_once __DIR__ . '/components/hero_header.php';
+        ?>
+
+        <div class="p-6">
         <div class="max-w-xl mx-auto bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div class="border-b border-slate-100 pb-3">
                 <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
@@ -133,6 +145,7 @@
                 </div>
             </form>
         </div>
+        </div> <!-- /p-6 wrapper -->
     </main>
 </div>
 </body>

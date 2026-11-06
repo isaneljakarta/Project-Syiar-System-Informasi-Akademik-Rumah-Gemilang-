@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Syiar Gemilang | Portal Akademik & Kejuruan RGI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { rgi: { navy: '#0B1230', blue: '#2C3F9F', rose: '#E05A78', cream: '#F4EEE6' } },
+    fontFamily: { sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'] } } } };
+</script>
+<style>
+  html { background: #0B1230; }
+  .glass { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.28);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4);
+    box-shadow: 0 24px 60px -12px rgba(5,10,40,.55); }
+  .glass-dark { background: rgba(11,18,48,.46); }
+  .act, #overlay, [data-s] { will-change: transform, opacity; }
+  .badge[aria-pressed="true"] { background: #E05A78; border-color: #E05A78; color: #fff; }
+  /* Kurangi gerakan: tanpa scrub, tampilkan frame akhir (lobi) + overlay. */
+  .rm #track { min-height: 0 !important; }
+  .rm #stage { position: relative; height: auto; min-height: 100svh; }
+  .rm #vid, .rm .act { display: none; }
+  .rm #pEnd { opacity: 1 !important; }
+  .rm #overlay { position: relative; opacity: 1 !important; transform: none !important; min-height: 100svh; }
+  .rm [data-s] { opacity: 1 !important; transform: none !important; }
+</style>
+</head>
+<body class="bg-rgi-navy font-sans text-white antialiased">
+
+<header id="nav" class="fixed inset-x-0 top-0 z-50 transition" style="padding-top: env(safe-area-inset-top, 0px)">
+  <div class="absolute inset-0 -z-10 bg-gradient-to-b from-rgi-navy/75 to-transparent"></div>
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+    <a href="#" class="flex items-center gap-3" aria-label="Syiar Gemilang, beranda">
+      <!-- Logo sementara. Ganti dengan <img src="logo.webp" class="h-9"> -->
+      <svg viewBox="0 0 40 40" class="h-9 w-9" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#2C3F9F"/><path d="M9 27c4-10 9-15 22-16-3 3-4 6-4 9 0 4-3 7-8 7-4 0-7 0-10 0z" fill="#fff"/><circle cx="29" cy="12" r="3" fill="#E05A78"/></svg>
+      <span class="leading-tight"><span class="block text-[15px] font-extrabold tracking-tight">Syiar Gemilang</span><span class="block text-[11px] font-medium text-white/70">Rumah Gemilang Indonesia</span></span>
+    </a>
+    <nav class="flex items-center gap-2 text-sm font-semibold">
+      <a href="#tentang" class="hidden rounded-full px-4 py-2 text-white/85 hover:text-white sm:inline-block">Tentang RGI</a>
+      <a href="login.html" class="rounded-full bg-white px-4 py-2 text-rgi-navy hover:bg-rgi-cream">Masuk</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- #track = ruang scroll. Scroll = pita film: posisi scroll menentukan video.currentTime. -->
+<section id="track" class="relative min-h-[600svh]" aria-label="Pembuka">
+  <div id="stage" class="sticky top-0 h-[100svh] overflow-hidden bg-rgi-navy">
+
+    <!-- Poster: tampil sebelum video siap, dan sebagai cadangan jika video gagal dimuat. -->
+    <img id="pStart" class="absolute inset-0 h-full w-full object-cover" alt="Halaman depan gedung Rumah Gemilang Indonesia" fetchpriority="high">
+    <img id="pEnd" class="absolute inset-0 h-full w-full object-cover opacity-0" alt="" aria-hidden="true">
+
+    <!--
+      GANTI VIDEO: ubah dua file di JS (VIDEO_DESKTOP / VIDEO_MOBILE). Video harus di-encode untuk scrub
+      (keyframe rapat), lihat perintah ffmpeg di komentar script. Video AI (Runway, Kling, Veo, dsb.)
+      bisa langsung menggantikan file ini selama gerakannya satu arah maju.
+    -->
+    <video id="vid" class="absolute inset-0 h-full w-full object-cover" muted playsinline preload="auto" tabindex="-1" aria-hidden="true"></video>
+
+    <!-- Scrim lokal hanya di area teks -->
+    <div id="scrimTop" class="pointer-events-none absolute inset-x-0 top-0 h-[22%] bg-gradient-to-b from-rgi-navy/65 to-transparent"></div>
+    <div id="scrimBot" class="pointer-events-none absolute inset-0" style="background:linear-gradient(to top,rgba(8,14,46,.72),rgba(8,14,46,.3) 30%,transparent 58%)"></div>
+
+    <!-- AKT 1: sambutan -->
+    <div class="act absolute inset-x-0 bottom-0 px-6 pb-[11svh] text-center" data-in="-0.05" data-out="0.17" data-fi="0.05">
+      <h1 class="mx-auto max-w-4xl text-[2.5rem] font-extrabold leading-[1.03] tracking-tight drop-shadow-[0_4px_18px_rgba(5,10,40,.7)] sm:text-6xl md:text-7xl">
+        Selamat Datang di <span class="block text-rgi-cream">Syiar Gemilang</span></h1>
+      <p class="mt-4 text-lg font-semibold drop-shadow-[0_2px_10px_rgba(5,10,40,.8)] sm:text-xl">Portal Akademik &amp; Kejuruan RGI</p>
+    </div>
+    <!-- AKT 2: siapa kita (teks asli dari papan nama gedung) -->
+    <div class="act absolute bottom-0 left-0 max-w-xl px-6 pb-[11svh] sm:pl-14" data-in="0.24" data-out="0.46">
+      <p class="text-2xl font-bold leading-snug drop-shadow-[0_3px_14px_rgba(5,10,40,.85)] sm:text-4xl">Pusat pengentasan pengangguran dan pemberdayaan pemuda usia produktif.</p>
+    </div>
+    <!-- AKT 3: ambang pintu -->
+    <div class="act absolute bottom-0 right-0 px-6 pb-[11svh] text-right sm:pr-14" data-in="0.55" data-out="0.74">
+      <p class="text-3xl font-extrabold tracking-tight drop-shadow-[0_3px_14px_rgba(5,10,40,.85)] sm:text-5xl">Silakan masuk.</p>
+    </div>
+
+    <!-- AKT 4: overlay kaca saat lobi terbuka penuh, bertahan sampai akhir -->
+    <div id="overlay" class="absolute inset-0 flex items-start px-4 pb-6 pt-[5.25rem] sm:items-center sm:px-10 sm:pb-10 sm:pt-24" style="opacity:0" inert>
+      <div class="glass glass-dark w-full max-w-xl rounded-3xl p-6 sm:p-8">
+        <h2 data-s class="text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">Satu pintu untuk belajar, berlatih, dan berkembang.</h2>
+        <ul class="mt-5 space-y-3 text-[15px]">
+          <!-- Poin fitur: teks contoh, sesuaikan dengan fitur portal -->
+          <li data-s class="flex gap-3"><span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-rgi-rose"></span><span><b>Jadwal &amp; presensi</b> kelas kejuruan dalam satu tempat.</span></li>
+          <li data-s class="flex gap-3"><span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-rgi-rose"></span><span><b>Materi &amp; tugas</b> dari instruktur, bisa diakses kapan saja.</span></li>
+          <li data-s class="flex gap-3"><span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-rgi-rose"></span><span><b>Nilai &amp; sertifikat</b> tercatat rapi dan mudah dilihat.</span></li>
+        </ul>
+        <div data-s class="mt-7 flex flex-col gap-3 sm:flex-row">
+          <a href="login.html" class="rounded-full bg-white px-6 py-3.5 text-center text-sm font-bold text-rgi-navy transition hover:-translate-y-0.5 hover:bg-rgi-cream">Masuk ke Portal Akademik</a>
+          <a href="#tentang" class="rounded-full border border-white/40 px-6 py-3.5 text-center text-sm font-bold transition hover:bg-white/15">Tentang Program RGI</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tentang" class="relative z-10 bg-rgi-navy px-5 pb-24">
+  <div class="mx-auto max-w-5xl">
+    <div class="glass relative -mt-20 rounded-3xl p-7 sm:p-10 md:flex md:items-center md:justify-between md:gap-10" style="background:linear-gradient(135deg,rgba(44,63,159,.85),rgba(11,18,48,.92))">
+      <div class="max-w-md">
+        <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">Siap melangkah masuk?</h2>
+        <p class="mt-2 text-white/75">Rumah Gemilang Indonesia adalah pusat pengentasan pengangguran dan pemberdayaan pemuda usia produktif.</p>
+      </div>
+      <div class="mt-6 flex flex-col gap-3 md:mt-0 md:shrink-0">
+        <a href="login.html" class="rounded-full bg-rgi-rose px-7 py-3.5 text-center text-sm font-bold transition hover:-translate-y-0.5 hover:brightness-110">Masuk ke Portal Akademik</a>
+        <a href="#program" class="rounded-full border border-white/35 px-7 py-3.5 text-center text-sm font-bold transition hover:bg-white/10">Tentang Program RGI</a>
+      </div>
+    </div>
+    <div id="program" class="pt-20">
+      <h2 class="text-xl font-extrabold tracking-tight text-white/90 sm:text-2xl">Program kejuruan</h2>
+      <div class="mt-5 flex flex-wrap gap-3" role="group" aria-label="Pilih minat jurusan">
+        <button class="badge rounded-full border border-white/25 bg-white/5 px-5 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rgi-rose" aria-pressed="false">IT / TKJ</button>
+        <button class="badge rounded-full border border-white/25 bg-white/5 px-5 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rgi-rose" aria-pressed="false">Tata Busana</button>
+        <button class="badge rounded-full border border-white/25 bg-white/5 px-5 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rgi-rose" aria-pressed="false">Kuliner</button>
+        <button class="badge rounded-full border border-white/25 bg-white/5 px-5 py-2.5 text-sm font-semibold transition hover:-translate-y-0.5 hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rgi-rose" aria-pressed="false">Otomotif</button>
+      </div>
+      <p id="minat" class="mt-4 min-h-[1.5rem] text-sm text-white/65" aria-live="polite">Pilih jurusan yang kamu minati.</p>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="bg-rgi-navy px-5 pb-10 text-center text-xs text-white/45">&copy; <span id="yr"></span> Syiar Gemilang &middot; Rumah Gemilang Indonesia</footer>
+
+<script>
+(() => {
+  /* ====== CONFIG: GANTI VIDEO / POSTER DI SINI ======
+     Video dirender sebagai satu gerakan kamera maju yang tidak terputus. Dua versi:
+     landscape (desktop) dan portrait (HP). Ganti nama file bila Anda punya video lain.
+     Encode video baru agar enak di-scrub (keyframe rapat, tanpa audio):
+       ffmpeg -i input.mp4 -c:v libx264 -crf 24 -g 5 -keyint_min 5 -sc_threshold 0 \
+              -pix_fmt yuv420p -movflags +faststart -an walkthrough.mp4
+     poster = frame pertama, posterEnd = frame terakhir (dipakai saat video gagal/reduced motion). */
+  const CFG = {
+    desktop: { video: 'walkthrough.mp4',   poster: 'poster.webp',   posterEnd: 'poster-end.webp' },
+    mobile:  { video: 'walkthrough-m.mp4', poster: 'poster-m.webp', posterEnd: 'poster-end-m.webp' },
+    overlayFrom: 0.76,      // progres scroll saat kartu kaca mulai muncul
+    smooth: 0.12            // 0.05 licin/lambat ... 0.3 responsif
+  };
+
+  const $ = (s) => document.querySelector(s), clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const sstep = (a, b, v) => { const t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); };
+  const track = $('#track'), vid = $('#vid'), pS = $('#pStart'), pE = $('#pEnd'), ov = $('#overlay'),
+        sb = $('#scrimBot'), nav = $('#nav'), acts = [...document.querySelectorAll('.act')],
+        stag = [...ov.querySelectorAll('[data-s]')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const c = matchMedia('(max-aspect-ratio: 1/1)').matches ? CFG.mobile : CFG.desktop;
+  pS.src = c.poster; pE.src = c.posterEnd;
+  if (reduce) document.documentElement.classList.add('rm');
+
+  let ready = false, failed = false, target = 0, cur = 0, raf = 0, lastSeek = 0, inertState = null;
+  vid.addEventListener('loadedmetadata', () => { ready = true; render(cur); });
+  vid.addEventListener('error', () => { failed = true; render(cur); });
+  if (!reduce) { vid.src = c.video; vid.load(); }
+  // iOS/Safari: "bangunkan" decoder dengan play lalu pause pada interaksi pertama.
+  const prime = () => { vid.play().then(() => vid.pause()).catch(() => {}); };
+  addEventListener('touchstart', prime, { once: true, passive: true });
+  addEventListener('scroll', prime, { once: true, passive: true });
+
+  const progress = () => { const m = track.offsetHeight - innerHeight; return m > 0 ? clamp(-track.getBoundingClientRect().top / m) : 1; };
+
+  function render(p) {
+    if (reduce) return;
+    // 1) Scrub: scroll = currentTime. Jangan menumpuk seek (menghindari lag).
+    const ok = ready && !failed && vid.duration;
+    if (ok) {
+      const t = p * (vid.duration - 0.04), now = performance.now();
+      if (Math.abs(vid.currentTime - t) > 0.008 && (!vid.seeking || now - lastSeek > 120)) {
+        vid.currentTime = t; lastSeek = now;
+      }
+      vid.style.opacity = 1;
+    } else {            // cadangan: poster awal -> poster akhir saat video belum/tidak ada
+      vid.style.opacity = 0; pE.style.opacity = sstep(0.05, 0.8, p).toFixed(3);
+    }
+    if (ok) pE.style.opacity = 0;
+    // 2) Teks per akt: jendela [in, out], fade + naik halus
+    acts.forEach((el) => {
+      const a = +el.dataset.in, b = +el.dataset.out, fi = +(el.dataset.fi || 0.04), fo = 0.035;
+      const k = Math.min(sstep(a, a + fi, p), 1 - sstep(b - fo, b, p));
+      el.style.opacity = clamp(k).toFixed(3);
+      el.style.transform = `translate3d(0,${((1 - k) * 18).toFixed(1)}px,0)`;
+    });
+    // 3) Overlay kaca + stagger
+    const o = sstep(CFG.overlayFrom, CFG.overlayFrom + 0.14, p);
+    ov.style.opacity = o.toFixed(3);
+    ov.style.transform = `translate3d(0,${((1 - o) * 36).toFixed(1)}px,0)`;
+    stag.forEach((el, i) => { const k = clamp((o - i * 0.14) / 0.55);
+      el.style.opacity = k.toFixed(3); el.style.transform = `translate3d(0,${((1 - k) * 20).toFixed(1)}px,0)`; });
+    const off = o < 0.5; if (off !== inertState) { ov.toggleAttribute('inert', off); inertState = off; }
+  }
+
+  function tick() {                     // lerp: halus di wheel & sentuh, berhenti sendiri saat diam
+    cur += (target - cur) * CFG.smooth;
+    if (Math.abs(target - cur) < 0.0002) cur = target;
+    render(cur); raf = cur === target ? 0 : requestAnimationFrame(tick);
+  }
+  addEventListener('scroll', () => {
+    target = progress(); if (!raf && !reduce) raf = requestAnimationFrame(tick);
+    nav.classList.toggle('backdrop-blur-md', scrollY > 40);
+  }, { passive: true });
+  // Tailwind CDN menerapkan gaya setelah script ini jalan: hitung ulang saat tinggi track berubah / halaman selesai dimuat.
+  const resync = () => { target = cur = progress(); render(cur); };
+  addEventListener('resize', resync); addEventListener('load', resync);
+  if ('ResizeObserver' in window) new ResizeObserver(resync).observe(track);
+  target = cur = progress(); render(cur);
+
+  const sel = new Set(), info = $('#minat');
+  document.querySelectorAll('.badge').forEach((b) => b.addEventListener('click', () => {
+    const n = b.textContent.trim(), on = b.getAttribute('aria-pressed') !== 'true';
+    b.setAttribute('aria-pressed', on); on ? sel.add(n) : sel.delete(n);
+    info.textContent = sel.size ? 'Minat kamu: ' + [...sel].join(', ') + '. Masuk ke portal untuk melihat kelasnya.' : 'Pilih jurusan yang kamu minati.';
+  }));
+  $('#yr').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
