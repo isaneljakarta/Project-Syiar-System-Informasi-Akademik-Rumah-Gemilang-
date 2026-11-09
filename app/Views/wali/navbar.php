@@ -131,6 +131,12 @@
                 <i class="fa-solid fa-house w-5 text-center text-base shrink-0"></i>
                 <span class="sidebar-label truncate">Laporan Santri</span>
             </a>
+
+            <a href="<?= base_url('ganti-password'); ?>" title="Ganti Password"
+               class="sidebar-nav-link nav-link <?= (url_is('ganti-password*') || url_is('/ganti-password*')) ? 'bg-[#0066CC] text-white shadow-md shadow-[#0066CC]/30 font-semibold' : 'text-slate-300 hover:bg-white/10 hover:text-white' ?> flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-150">
+                <i class="fa-solid fa-key w-5 text-center text-base shrink-0"></i>
+                <span class="sidebar-label truncate">Ganti Password</span>
+            </a>
         </nav>
 
         <!-- User Profile & Logout -->
@@ -149,10 +155,16 @@
                         </div>
                     </div>
                 </div>
-                <button type="button" onclick="openLogoutModal()" title="Keluar / Logout" 
-                   class="w-8 h-8 rounded-lg bg-white/10 hover:bg-rose-600 hover:text-white text-slate-300 flex items-center justify-center transition shrink-0 cursor-pointer">
-                    <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
-                </button>
+                <div class="flex items-center gap-1">
+                    <a href="<?= base_url('ganti-password'); ?>" title="Pengaturan Sandi"
+                       class="w-8 h-8 rounded-lg bg-white/10 hover:bg-[#0066CC] text-slate-300 hover:text-white flex items-center justify-center transition shrink-0 cursor-pointer">
+                        <i class="fa-solid fa-key text-xs"></i>
+                    </a>
+                    <button type="button" onclick="openLogoutModal()" title="Keluar / Logout" 
+                       class="w-8 h-8 rounded-lg bg-white/10 hover:bg-rose-600 hover:text-white text-slate-300 flex items-center justify-center transition shrink-0 cursor-pointer">
+                        <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </aside>

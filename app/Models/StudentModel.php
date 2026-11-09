@@ -8,10 +8,10 @@ class StudentModel extends Model
 {
     protected $primaryKey    = 'id';
     protected $table         = 'nilai_santri'; // Nama tabel di database
-    protected $allowedFields = ['nama', 'kelas', 'tauhid', 'fiqih', 'b_ing', 'menulis_kreatif', 'adab_akhlaq', 'kehadiran']; // Kolom yang diizinkan untuk diisi
+    protected $allowedFields = ['nama', 'nis', 'cabang', 'kelas', 'angkatan', 'status', 'foto', 'tauhid', 'fiqih', 'b_ing', 'menulis_kreatif', 'adab_akhlaq', 'kehadiran']; // Kolom yang diizinkan untuk diisi
 
     // Kolom perhitungan nilai dengan pembobotan 80% Akademik + 20% Adab & Akhlaq
-    private string $selectFormula = 'id, nama, kelas, tauhid, b_ing, menulis_kreatif, fiqih, adab_akhlaq, kehadiran,
+    private string $selectFormula = 'id, nama, nis, cabang, kelas, angkatan, status, foto, tauhid, b_ing, menulis_kreatif, fiqih, adab_akhlaq, kehadiran,
         ROUND((tauhid + b_ing + menulis_kreatif + fiqih) / 4, 2) as rata_akademik,
         ROUND((((tauhid + b_ing + menulis_kreatif + fiqih) / 4 * 0.8) + (adab_akhlaq * 0.2)), 2) as rata_rata';
 
@@ -67,7 +67,7 @@ class StudentModel extends Model
         $fields = $db->getFieldNames('nilai_santri');
 
         // Kolom yang BUKAN merupakan mata pelajaran / aspek penilaian
-        $kolom_bukan_mapel = ['id', 'nama', 'kelas', 'nilai_global', 'kehadiran'];
+        $kolom_bukan_mapel = ['id', 'nama', 'nis', 'cabang', 'kelas', 'angkatan', 'status', 'foto', 'nilai_global', 'kehadiran'];
 
         $mapel = array_diff($fields, $kolom_bukan_mapel);
         return count($mapel);

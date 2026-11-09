@@ -57,6 +57,62 @@ class Auth extends BaseController
         return redirect()->to(base_url('login'))->with('success', 'Anda telah berhasil keluar dari sistem.');
     }
 
+    public function changePassword()
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url('login'))->with('error', 'Silakan masuk terlebih dahulu.');
+        }
+
+        $userId = session()->get('user_id');
+        $db = \Config\Database::connect();
+        $user = $db->table('users')->where('id', $userId)->get()->getRowArray();
+
+        $data = [
+            'title' => 'Pengaturan Kata Sandi',
+            'user'  => $user
+        ];
+
+        return view('auth/change_password', $data);
+    }
+
+    public function updatePassword()
+    {
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url('login'))->with('error', 'Silakan masuk terlebih dahulu.');
+        }
+
+        $userId = (int)session()->get('user_id');
+        $currentPassword = (string)$this->request->getPost('current_password');
+        $newPassword = (string)$this->request->getPost('new_password');
+        $confirmPassword = (string)$this->request->getPost('confirm_password');
+
+        if (empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
+            return redirect()->back()->with('error', 'Semua kolom kata sandi wajib diisi!');
+        }
+
+        if (strlen($newPassword) < 6) {
+            return redirect()->back()->with('error', 'Kata sandi baru minimal terdiri dari 6 karakter!');
+        }
+
+        if ($newPassword !== $confirmPassword) {
+            return redirect()->back()->with('error', 'Konfirmasi kata sandi baru tidak sesuai dengan kata sandi baru!');
+        }
+
+        $db = \Config\Database::connect();
+        $user = $db->table('users')->where('id', $userId)->get()->getRowArray();
+
+        if (!$user || !password_verify($currentPassword, $user['password'])) {
+            return redirect()->back()->with('error', 'Kata sandi saat ini yang Anda masukkan salah!');
+        }
+
+        // Simpan password baru
+        $db->table('users')->where('id', $userId)->update([
+            'password' => password_hash($newPassword, PASSWORD_BCRYPT)
+        ]);
+
+        return redirect()->back()->with('success', 'Kata sandi berhasil diperbarui! Silakan gunakan kata sandi baru Anda.');
+    }
+
     private function redirectByRole(string $role)
     {
         switch ($role) {

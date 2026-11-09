@@ -42,7 +42,7 @@ $childKelasBadge = $jurusanColors[$santri['kelas']]['badge'] ?? 'bg-blue-50 text
             ],
             'badge' => 'Lembaga Pendidikan E-RGI Syiar Gemilang',
             'title' => 'Laporan Perkembangan: ' . esc($santri['nama']),
-            'subtitle' => 'NIS: #' . esc($santri['id']) . ' &bull; Jurusan: ' . esc($santri['kelas']) . '. Pantau capaian akademik 4 mata pelajaran, evaluasi adab akhlaq (20%), serta rekapitulasi kehadiran ananda secara transparan.',
+            'subtitle' => 'NIS: ' . esc($santri['nis'] ?? '-') . ' &bull; Jurusan: ' . esc($santri['kelas']) . ' &bull; ' . esc($santri['cabang'] ?? 'Kampus Utama Depok') . '. Pantau capaian akademik 4 mata pelajaran, evaluasi adab akhlaq (20%), serta rekapitulasi kehadiran ananda secara transparan.',
             'stats' => [
                 ['icon' => 'fa-solid fa-graduation-cap', 'bg' => 'bg-sky-400/20 text-sky-200', 'value' => esc($santri['kelas']), 'label' => 'Kelas Kejuruan'],
                 ['icon' => 'fa-solid fa-trophy', 'bg' => 'bg-amber-400/20 text-amber-200', 'value' => '#' . ($rank ?? '-'), 'label' => 'Peringkat Kelas'],

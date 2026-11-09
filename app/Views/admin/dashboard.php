@@ -28,7 +28,7 @@ $ambangKehadiran = 75;
     .sg-dash a:focus-visible,
     .sg-dash button:focus-visible { outline: 2px solid #0066CC; outline-offset: 2px; }
 
-    /* Satu momen gerak saat halaman dimuat: bar terisi dari kiri (transform, bukan width) */
+    /* Satu momen gerak saat halaman dimuat: bar terisi dari kiri (transform, bukan width) sekalian buat chart graphic */
     @keyframes sg-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
     .sg-bar { transform-origin: left center; animation: sg-fill 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 

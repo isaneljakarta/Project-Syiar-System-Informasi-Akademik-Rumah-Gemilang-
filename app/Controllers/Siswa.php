@@ -12,7 +12,7 @@ class Siswa extends BaseController
         $santriId = (int)session()->get('santri_id');
 
         // Ambil data nilai santri yang sedang login dengan formula terbobot
-        $santri = $studentModel->select('id, nama, kelas, tauhid, b_ing, menulis_kreatif, fiqih, adab_akhlaq, kehadiran,
+        $santri = $studentModel->select('id, nama, nis, cabang, kelas, angkatan, status, foto, tauhid, b_ing, menulis_kreatif, fiqih, adab_akhlaq, kehadiran,
             ROUND((tauhid + b_ing + menulis_kreatif + fiqih) / 4, 2) as rata_akademik,
             ROUND((((tauhid + b_ing + menulis_kreatif + fiqih) / 4 * 0.8) + (adab_akhlaq * 0.2)), 2) as rata_rata')
             ->find($santriId);

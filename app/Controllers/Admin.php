@@ -35,8 +35,12 @@ class Admin extends BaseController
     {
         $studentModel = new StudentModel();
 
-        $name            = $this->request->getPost('nama');
+        $name            = trim((string)$this->request->getPost('nama'));
         $class           = $this->request->getPost('kelas');
+        $nis             = trim((string)$this->request->getPost('nis'));
+        $cabang          = trim((string)$this->request->getPost('cabang')) ?: 'Kampus Utama Depok';
+        $angkatan        = trim((string)$this->request->getPost('angkatan')) ?: 'Angkatan 35';
+        $status          = $this->request->getPost('status') ?: 'Aktif';
         $tauhid          = $this->request->getPost('tauhid');
         $fiqih           = $this->request->getPost('fiqih');
         $b_ing           = $this->request->getPost('b_ing');
@@ -46,12 +50,39 @@ class Admin extends BaseController
 
         // Validasi sederhana untuk memastikan data wajib tidak kosong
         if (empty($name) || empty($class) || empty($tauhid) || empty($fiqih) || empty($b_ing) || empty($menulis_kreatif)) {
-            return redirect()->back()->withInput()->with('error', 'Semua kolom nilai wajib diisi!');
+            return redirect()->back()->withInput()->with('error', 'Semua kolom nilai dan nama wajib diisi!');
+        }
+
+        // Handle Upload Foto Profil
+        $fotoName = null;
+        $fotoFile = $this->request->getFile('foto');
+        if ($fotoFile && $fotoFile->isValid() && !$fotoFile->hasMoved()) {
+            $allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+            if (in_array($fotoFile->getMimeType(), $allowedMimes, true)) {
+                $fotoName = $fotoFile->getRandomName();
+                $targetDir = FCPATH . 'uploads/santri';
+                if (!is_dir($targetDir)) {
+                    mkdir($targetDir, 0777, true);
+                }
+                $fotoFile->move($targetDir, $fotoName);
+            }
+        }
+
+        // Auto-generate NIS bila kosong
+        if (empty($nis)) {
+            $lastRow = $studentModel->orderBy('id', 'DESC')->first();
+            $nextId = ($lastRow ? (int)$lastRow['id'] : 0) + 1;
+            $nis = 'RGI-35' . str_pad((string)$nextId, 3, '0', STR_PAD_LEFT);
         }
 
         $dataToSave = [
             'nama'            => $name,
+            'nis'             => $nis,
+            'cabang'          => $cabang,
             'kelas'           => $class,
+            'angkatan'        => $angkatan,
+            'status'          => $status,
+            'foto'            => $fotoName,
             'tauhid'          => $tauhid,
             'fiqih'           => $fiqih,
             'b_ing'           => $b_ing,
@@ -64,7 +95,7 @@ class Admin extends BaseController
 
         return redirect()->to(base_url('/admin/data'))->with('notif_type', 'add')
             ->with('notif_title', 'Berhasil Menambahkan Santri!')
-            ->with('notif_msg', "Data santri {$name} berhasil ditambahkan!");
+            ->with('notif_msg', "Data santri {$name} (NIS: {$nis}) berhasil ditambahkan!");
     }
 
     public function dataStudent()
@@ -87,11 +118,15 @@ class Admin extends BaseController
     public function update()
     {
         $studentModel = new StudentModel();
-        $id = $this->request->getPost('id');
+        $id = (int)$this->request->getPost('id');
 
         $dataToUpdate = [
-            'nama'            => $this->request->getPost('nama'),
+            'nama'            => trim((string)$this->request->getPost('nama')),
+            'nis'             => trim((string)$this->request->getPost('nis')),
+            'cabang'          => trim((string)$this->request->getPost('cabang')) ?: 'Kampus Utama Depok',
             'kelas'           => $this->request->getPost('kelas'),
+            'angkatan'        => trim((string)$this->request->getPost('angkatan')) ?: 'Angkatan 35',
+            'status'          => $this->request->getPost('status') ?: 'Aktif',
             'tauhid'          => $this->request->getPost('tauhid'),
             'fiqih'           => $this->request->getPost('fiqih'),
             'b_ing'           => $this->request->getPost('b_ing'),
@@ -100,12 +135,27 @@ class Admin extends BaseController
             'kehadiran'       => $this->request->getPost('kehadiran') ?? 95,
         ];
 
+        // Handle foto upload jika diunggah file baru
+        $fotoFile = $this->request->getFile('foto');
+        if ($fotoFile && $fotoFile->isValid() && !$fotoFile->hasMoved()) {
+            $allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+            if (in_array($fotoFile->getMimeType(), $allowedMimes, true)) {
+                $fotoName = $fotoFile->getRandomName();
+                $targetDir = FCPATH . 'uploads/santri';
+                if (!is_dir($targetDir)) {
+                    mkdir($targetDir, 0777, true);
+                }
+                $fotoFile->move($targetDir, $fotoName);
+                $dataToUpdate['foto'] = $fotoName;
+            }
+        }
+
         $studentModel->update($id, $dataToUpdate);
 
         return redirect()->to('/admin/data')
             ->with('notif_type', 'edit')
             ->with('notif_title', 'Data Santri Diperbarui!')
-            ->with('notif_msg', "Data santri {$dataToUpdate['nama']} ({$id}) berhasil diedit.");
+            ->with('notif_msg', "Data santri {$dataToUpdate['nama']} (NIS: {$dataToUpdate['nis']}) berhasil diedit.");
     }
 
     public function delete($id = null)
@@ -218,5 +268,157 @@ class Admin extends BaseController
         return redirect()->to('/admin/kehadiran')->with('notif_type', 'add')
             ->with('notif_title', 'Sesi Kehadiran Dicatat!')
             ->with('notif_msg', "Sesi {$namaSesi} berhasil ditambahkan ke riwayat kehadiran.");
+    }
+
+    /**
+     * =========================================================================
+     * MANAJEMEN PENGGUNA (USER LOGIN MANAGEMENT)
+     * =========================================================================
+     */
+
+    public function users()
+    {
+        $db = \Config\Database::connect();
+        $users = $db->table('users u')
+            ->select('u.*, ns.nama as santri_nama, ns.kelas as santri_kelas, ns.nis as santri_nis, ns.foto as santri_foto')
+            ->join('nilai_santri ns', 'ns.id = u.santri_id', 'left')
+            ->orderBy('u.id', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        $stats = [
+            'total'       => count($users),
+            'admin'       => 0,
+            'instruktur'  => 0,
+            'siswa'       => 0,
+            'wali_santri' => 0,
+            'aktif'       => 0,
+        ];
+
+        foreach ($users as $u) {
+            if (isset($stats[$u['role']])) {
+                $stats[$u['role']]++;
+            }
+            if (!empty($u['is_active'])) {
+                $stats['aktif']++;
+            }
+        }
+
+        $data = [
+            'title' => 'Manajemen Pengguna (User Login)',
+            'users' => $users,
+            'stats' => $stats
+        ];
+
+        return view('admin/user_list', $data);
+    }
+
+    public function addUser()
+    {
+        $db = \Config\Database::connect();
+        $santriList = $db->table('nilai_santri')
+            ->select('id, nama, nis, kelas, cabang')
+            ->orderBy('nama', 'ASC')
+            ->get()
+            ->getResultArray();
+
+        $data = [
+            'title'       => 'Tambah User Login Baru',
+            'santri_list' => $santriList
+        ];
+
+        return view('admin/user_add', $data);
+    }
+
+    public function saveUser()
+    {
+        $nama       = trim((string)$this->request->getPost('nama'));
+        $username   = trim((string)$this->request->getPost('username'));
+        $password   = (string)$this->request->getPost('password');
+        $role       = (string)$this->request->getPost('role');
+        $santriId   = $this->request->getPost('santri_id') ? (int)$this->request->getPost('santri_id') : null;
+        $isActive   = $this->request->getPost('is_active') !== null ? (int)$this->request->getPost('is_active') : 1;
+
+        if (empty($nama) || empty($username) || empty($password) || empty($role)) {
+            return redirect()->back()->withInput()->with('error', 'Nama, username, password, dan role wajib diisi!');
+        }
+
+        if (strlen($password) < 6) {
+            return redirect()->back()->withInput()->with('error', 'Password minimal 6 karakter!');
+        }
+
+        $allowedRoles = ['admin', 'instruktur', 'siswa', 'wali_santri'];
+        if (!in_array($role, $allowedRoles, true)) {
+            return redirect()->back()->withInput()->with('error', 'Role pengguna tidak valid!');
+        }
+
+        $db = \Config\Database::connect();
+        $existing = $db->table('users')->where('username', $username)->get()->getRowArray();
+        if ($existing) {
+            return redirect()->back()->withInput()->with('error', "Username '{$username}' sudah digunakan, silakan pilih username lain.");
+        }
+
+        $db->table('users')->insert([
+            'nama'       => $nama,
+            'username'   => $username,
+            'password'   => password_hash($password, PASSWORD_BCRYPT),
+            'role'       => $role,
+            'santri_id'  => ($role === 'siswa' || $role === 'wali_santri') ? $santriId : null,
+            'is_active'  => $isActive,
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        return redirect()->to(base_url('admin/users'))
+            ->with('notif_type', 'add')
+            ->with('notif_title', 'User Baru Berhasil Dibuat!')
+            ->with('notif_msg', "Pengguna {$nama} (@{$username}) dengan role '{$role}' berhasil ditambahkan.");
+    }
+
+    public function toggleUserStatus($id)
+    {
+        $currentUserId = (int)session()->get('user_id');
+        $targetId = (int)$id;
+
+        if ($targetId === $currentUserId) {
+            return redirect()->to(base_url('admin/users'))->with('error', 'Anda tidak dapat menonaktifkan akun Anda sendiri!');
+        }
+
+        $db = \Config\Database::connect();
+        $user = $db->table('users')->where('id', $targetId)->get()->getRowArray();
+        if (!$user) {
+            return redirect()->to(base_url('admin/users'))->with('error', 'User tidak ditemukan.');
+        }
+
+        $newStatus = $user['is_active'] ? 0 : 1;
+        $db->table('users')->where('id', $targetId)->update(['is_active' => $newStatus]);
+
+        $statusText = $newStatus ? 'diaktifkan' : 'dinonaktifkan';
+        return redirect()->to(base_url('admin/users'))
+            ->with('notif_type', 'edit')
+            ->with('notif_title', 'Status User Diperbarui!')
+            ->with('notif_msg', "Akun {$user['nama']} (@{$user['username']}) berhasil {$statusText}.");
+    }
+
+    public function deleteUser($id)
+    {
+        $currentUserId = (int)session()->get('user_id');
+        $targetId = (int)$id;
+
+        if ($targetId === $currentUserId) {
+            return redirect()->to(base_url('admin/users'))->with('error', 'Anda tidak dapat menghapus akun Anda sendiri yang sedang aktif!');
+        }
+
+        $db = \Config\Database::connect();
+        $user = $db->table('users')->where('id', $targetId)->get()->getRowArray();
+        if (!$user) {
+            return redirect()->to(base_url('admin/users'))->with('error', 'User tidak ditemukan.');
+        }
+
+        $db->table('users')->where('id', $targetId)->delete();
+
+        return redirect()->to(base_url('admin/users'))
+            ->with('notif_type', 'delete')
+            ->with('notif_title', 'User Dihapus!')
+            ->with('notif_msg', "Akun {$user['nama']} (@{$user['username']}) telah dihapus dari sistem.");
     }
 }

@@ -8,6 +8,8 @@ use CodeIgniter\Router\RouteCollection;
 $routes->match(['GET', 'HEAD'], 'login', 'Auth::login');
 $routes->post('login', 'Auth::attemptLogin');
 $routes->match(['GET', 'HEAD'], 'logout', 'Auth::logout');
+$routes->match(['GET', 'HEAD'], 'ganti-password', 'Auth::changePassword');
+$routes->post('ganti-password', 'Auth::updatePassword');
 
 // Root Route (Admin Dashboard / Role Dispatcher)
 $routes->match(['GET', 'HEAD'], '/', 'Admin::index', ['filter' => 'role:admin']);
@@ -24,6 +26,13 @@ $routes->group('admin', ['filter' => 'role:admin'], function ($routes) {
     $routes->get('kehadiran', 'Admin::kehadiran');
     $routes->post('kehadiran/add_sesi', 'Admin::addSesiKehadiran');
     $routes->post('kehadiran/catat', 'Admin::catatPresensiSantri');
+
+    // User Management Routes
+    $routes->get('users', 'Admin::users');
+    $routes->get('users/add', 'Admin::addUser');
+    $routes->post('users/save', 'Admin::saveUser');
+    $routes->post('users/toggle/(:segment)', 'Admin::toggleUserStatus/$1');
+    $routes->post('users/delete/(:segment)', 'Admin::deleteUser/$1');
 });
 
 // Instruktur Routes (Input/Update Nilai & Presensi)
