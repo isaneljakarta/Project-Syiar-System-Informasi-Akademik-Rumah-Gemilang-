@@ -19,7 +19,7 @@ switch ($currentRole) {
     case 'admin':
     default:
         require_once APPPATH . 'Views/admin/navbar.php';
-        $dashUrl = base_url('/');
+        $dashUrl = base_url('admin');
         $portalLabel = 'Portal Admin';
         break;
 }

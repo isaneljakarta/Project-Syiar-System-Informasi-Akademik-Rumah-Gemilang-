@@ -15,12 +15,15 @@
         <?php
         ob_start();
         ?>
-        <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
-            <a href="<?= base_url('instruktur/kelas'); ?>" class="px-3.5 py-2.5 bg-white text-brand-deep hover:bg-brand-light rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5">
-                <i class="fa-solid fa-layer-group text-brand"></i> Nilai per Kelas
+        <div class="grid grid-cols-2 items-center gap-2 sm:gap-2.5">
+            <a href="<?= base_url('instruktur/download-nilai-csv'); ?>" class="px-3.5 py-2.5 bg-white text-emerald-800 hover:bg-emerald-50 rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5" title="Download Rekap Nilai CSV">
+                <i class="fa-solid fa-file-csv text-emerald-600"></i> Rekap Nilai CSV
+            </a>
+            <a href="<?= base_url('instruktur/download-absensi-csv'); ?>" class="px-3.5 py-2.5 bg-white text-teal-800 hover:bg-teal-50 rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5" title="Download Rekap Presensi Bulanan CSV">
+                <i class="fa-solid fa-file-csv text-teal-600"></i> Rekap Presensi CSV
             </a>
             <a href="<?= base_url('instruktur/nilai'); ?>" class="px-3.5 py-2.5 bg-sky-500/80 hover:bg-sky-500 text-white rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5">
-                <i class="fa-solid fa-pen-to-square"></i> Kelola Nilai
+                <i class="fa-solid fa-pen-to-square"></i> Input Nilai
             </a>
             <a href="<?= base_url('instruktur/kehadiran'); ?>" class="px-3.5 py-2.5 bg-emerald-600/80 hover:bg-emerald-600 text-white rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5">
                 <i class="fa-solid fa-clipboard-user"></i> Isi Presensi

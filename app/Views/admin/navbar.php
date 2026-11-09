@@ -129,8 +129,8 @@
 
         <!-- Navigation Links -->
         <nav class="flex-1 p-3 space-y-1.5 text-sm font-medium overflow-y-auto">
-            <a href="<?= base_url('/'); ?>" title="Dashboard"
-               class="sidebar-nav-link nav-link <?= (url_is('') || url_is('/')) ? 'bg-[#0066CC] text-white shadow-md shadow-[#0066CC]/30 font-semibold' : 'text-slate-300 hover:bg-white/10 hover:text-white' ?> flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-150">
+            <a href="<?= base_url('admin'); ?>" title="Dashboard"
+               class="sidebar-nav-link nav-link <?= (url_is('admin') || url_is('admin/dashboard') || url_is('admin/')) ? 'bg-[#0066CC] text-white shadow-md shadow-[#0066CC]/30 font-semibold' : 'text-slate-300 hover:bg-white/10 hover:text-white' ?> flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-150">
                 <i class="fa-solid fa-house w-5 text-center text-base shrink-0"></i>
                 <span class="sidebar-label truncate">Dashboard</span>
             </a>
@@ -157,6 +157,12 @@
                class="sidebar-nav-link nav-link <?= (url_is('admin/kehadiran*') || url_is('/admin/kehadiran*')) ? 'bg-[#0066CC] text-white shadow-md shadow-[#0066CC]/30 font-semibold' : 'text-slate-300 hover:bg-white/10 hover:text-white' ?> flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-150">
                 <i class="fa-solid fa-clipboard-user w-5 text-center text-base shrink-0"></i>
                 <span class="sidebar-label truncate">Sesi Kehadiran</span>
+            </a>
+
+            <a href="<?= base_url('admin/announcements'); ?>" title="Papan Pengumuman Diklat"
+               class="sidebar-nav-link nav-link <?= (url_is('admin/announcements*') || url_is('/admin/announcements*')) ? 'bg-[#0066CC] text-white shadow-md shadow-[#0066CC]/30 font-semibold' : 'text-slate-300 hover:bg-white/10 hover:text-white' ?> flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition duration-150">
+                <i class="fa-solid fa-bullhorn w-5 text-center text-base shrink-0"></i>
+                <span class="sidebar-label truncate">Papan Pengumuman</span>
             </a>
 
             <a href="<?= base_url('admin/users'); ?>" title="Manajemen Pengguna"

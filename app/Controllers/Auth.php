@@ -24,7 +24,7 @@ class Auth extends BaseController
         $password = (string)$this->request->getPost('password');
 
         if (empty($username) || empty($password)) {
-            return redirect()->back()->withInput()->with('error', 'Username dan password wajib diisi.');
+            return redirect()->to(base_url('login'))->withInput()->with('error', 'Nomor Induk Santri (NIS) / Username dan kata sandi wajib diisi.');
         }
 
         $db = \Config\Database::connect();
@@ -35,7 +35,7 @@ class Auth extends BaseController
                    ->getRowArray();
 
         if (!$user || !password_verify($password, $user['password'])) {
-            return redirect()->back()->withInput()->with('error', 'Username atau password yang Anda masukkan salah.');
+            return redirect()->to(base_url('login'))->withInput()->with('error', 'Username atau kata sandi yang Anda masukkan salah.');
         }
 
         // Set session login
@@ -117,7 +117,7 @@ class Auth extends BaseController
     {
         switch ($role) {
             case 'admin':
-                return redirect()->to(base_url('/'));
+                return redirect()->to(base_url('admin'));
             case 'instruktur':
                 return redirect()->to(base_url('instruktur'));
             case 'siswa':

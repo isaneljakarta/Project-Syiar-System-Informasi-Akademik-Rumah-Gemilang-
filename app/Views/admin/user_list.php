@@ -15,7 +15,7 @@
         <?php
         $hero = [
             'breadcrumb' => [
-                ['label' => 'Portal Admin', 'url' => base_url('/')],
+                ['label' => 'Portal Admin', 'url' => base_url('admin')],
                 ['label' => 'Manajemen Pengguna']
             ],
             'badge' => 'Otoritas & Hak Akses Multi-Peran E-RGI',

@@ -15,7 +15,7 @@
         <?php
         $hero = [
             'breadcrumb' => [
-                ['label' => 'Portal Admin', 'url' => base_url('/')],
+                ['label' => 'Portal Admin', 'url' => base_url('admin')],
                 ['label' => 'Manajemen User', 'url' => base_url('admin/users')],
                 ['label' => 'Tambah User Login']
             ],

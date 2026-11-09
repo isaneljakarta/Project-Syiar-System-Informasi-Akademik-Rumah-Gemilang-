@@ -60,6 +60,35 @@ $myKelasBadge = $jurusanColors[$santri['kelas']]['badge'] ?? 'bg-blue-50 text-bl
 
         <div class="p-4 sm:p-6 space-y-6">
 
+        <!-- Alert Peringatan Absen Melebihi Batas (>3x) -->
+        <?php if (!empty($is_warning_absen)) : ?>
+            <div class="rounded-2xl bg-gradient-to-r from-rose-500 via-rose-600 to-red-700 text-white p-5 sm:p-6 shadow-lg shadow-rose-600/20 border border-rose-400/40 relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 w-32 h-32 rounded-full bg-white/10 pointer-events-none"></div>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md text-white flex items-center justify-center text-2xl shrink-0 border border-white/30 shadow-inner">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/25 text-white text-3xs font-extrabold uppercase tracking-wider mb-1.5 border border-white/30">
+                                <i class="fa-solid fa-bell"></i> Peringatan Kedisiplinan Akademik
+                            </div>
+                            <h3 class="text-base sm:text-lg font-black tracking-tight text-white leading-tight">
+                                Perhatian: Anda Telah Tercatat Absen / Alpa Sebanyak <?= (int)$absen_count; ?> Kali!
+                            </h3>
+                            <p class="text-xs text-white/90 mt-1 max-w-2xl leading-relaxed">
+                                Kehadiran Anda telah melampaui batas toleransi ketidakhadiran tanpa keterangan (&gt; 3 kali). Berdasarkan tata tertib Rumah Gemilang Indonesia, santri dengan status ini diwajibkan segera menghadap <strong>Instruktur Kejuruan / Wali Kelas</strong> untuk klarifikasi dan pembinaan sebelum dikenakan sanksi kedisiplinan lanjutan.
+                            </p>
+                        </div>
+                    </div>
+                    <a href="<?= base_url('siswa/presensi'); ?>" class="px-4 py-2.5 bg-white hover:bg-slate-100 text-rose-700 rounded-xl font-bold text-xs shadow-md transition duration-150 flex items-center gap-2 shrink-0 cursor-pointer whitespace-nowrap">
+                        <i class="fa-solid fa-clipboard-user"></i>
+                        <span>Cek Riwayat Presensi</span>
+                    </a>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <!-- Grade Summary & Final Score -->
         <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
 

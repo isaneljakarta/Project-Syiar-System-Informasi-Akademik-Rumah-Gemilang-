@@ -21,7 +21,7 @@ class RoleFilter implements FilterInterface
                 // Redirect user to their own home dashboard based on role
                 $target = base_url('login');
                 if ($userRole === 'admin') {
-                    $target = base_url('/');
+                    $target = base_url('admin');
                 } elseif ($userRole === 'instruktur') {
                     $target = base_url('instruktur');
                 } elseif ($userRole === 'siswa') {

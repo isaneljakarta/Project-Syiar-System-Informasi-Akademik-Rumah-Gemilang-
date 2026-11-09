@@ -421,4 +421,158 @@ class Admin extends BaseController
             ->with('notif_title', 'User Dihapus!')
             ->with('notif_msg', "Akun {$user['nama']} (@{$user['username']}) telah dihapus dari sistem.");
     }
+
+    // =========================================================================
+    // MANAJEMEN PAPAN PENGUMUMAN DIKLAT (PEKANAN / RESMI / TIDAK RESMI)
+    // =========================================================================
+
+    public function announcements()
+    {
+        $announcementModel = new \App\Models\AnnouncementModel();
+        $announcements = $announcementModel->getAllAnnouncements();
+
+        $stats = [
+            'total'       => count($announcements),
+            'resmi'       => 0,
+            'tidak_resmi' => 0,
+            'agenda'      => 0,
+            'aktif'       => 0,
+        ];
+
+        foreach ($announcements as $a) {
+            if (isset($stats[$a['kategori']])) {
+                $stats[$a['kategori']]++;
+            }
+            if (!empty($a['is_active'])) {
+                $stats['aktif']++;
+            }
+        }
+
+        $data = [
+            'title'         => 'Papan Pengumuman Diklat',
+            'announcements' => $announcements,
+            'stats'         => $stats
+        ];
+
+        return view('admin/announcements', $data);
+    }
+
+    public function saveAnnouncement()
+    {
+        $judul           = trim((string)$this->request->getPost('judul'));
+        $kategori        = (string)$this->request->getPost('kategori') ?: 'resmi';
+        $isi             = trim((string)$this->request->getPost('isi'));
+        $pekanKe         = trim((string)$this->request->getPost('pekan_ke')) ?: 'Pekan Ini';
+        $tanggalKegiatan = $this->request->getPost('tanggal_kegiatan') ?: null;
+        $waktuKegiatan   = trim((string)$this->request->getPost('waktu_kegiatan')) ?: null;
+        $lokasi          = trim((string)$this->request->getPost('lokasi')) ?: 'Kampus Diklat RGI';
+        $penyelenggara   = trim((string)$this->request->getPost('penyelenggara')) ?: 'Diklat RGI';
+        $isPinned        = $this->request->getPost('is_pinned') ? 1 : 0;
+        $isActive        = $this->request->getPost('is_active') !== null ? (int)$this->request->getPost('is_active') : 1;
+
+        if (empty($judul) || empty($isi)) {
+            return redirect()->back()->withInput()->with('error', 'Judul dan isi pengumuman wajib diisi!');
+        }
+
+        $announcementModel = new \App\Models\AnnouncementModel();
+        $announcementModel->insert([
+            'judul'            => $judul,
+            'kategori'         => $kategori,
+            'isi'              => $isi,
+            'pekan_ke'         => $pekanKe,
+            'tanggal_kegiatan' => $tanggalKegiatan,
+            'waktu_kegiatan'   => $waktuKegiatan,
+            'lokasi'           => $lokasi,
+            'penyelenggara'    => $penyelenggara,
+            'is_pinned'        => $isPinned,
+            'is_active'        => $isActive,
+        ]);
+
+        return redirect()->to(base_url('admin/announcements'))
+            ->with('notif_type', 'add')
+            ->with('notif_title', 'Pengumuman Berhasil Diterbitkan!')
+            ->with('notif_msg', "Pengumuman '{$judul}' telah terpasang di papan pengumuman landing page.");
+    }
+
+    public function updateAnnouncement()
+    {
+        $id = (int)$this->request->getPost('id');
+        $announcementModel = new \App\Models\AnnouncementModel();
+        $item = $announcementModel->find($id);
+
+        if (!$item) {
+            return redirect()->to(base_url('admin/announcements'))->with('error', 'Pengumuman tidak ditemukan.');
+        }
+
+        $judul           = trim((string)$this->request->getPost('judul'));
+        $kategori        = (string)$this->request->getPost('kategori') ?: 'resmi';
+        $isi             = trim((string)$this->request->getPost('isi'));
+        $pekanKe         = trim((string)$this->request->getPost('pekan_ke')) ?: 'Pekan Ini';
+        $tanggalKegiatan = $this->request->getPost('tanggal_kegiatan') ?: null;
+        $waktuKegiatan   = trim((string)$this->request->getPost('waktu_kegiatan')) ?: null;
+        $lokasi          = trim((string)$this->request->getPost('lokasi')) ?: 'Kampus Diklat RGI';
+        $penyelenggara   = trim((string)$this->request->getPost('penyelenggara')) ?: 'Diklat RGI';
+        $isPinned        = $this->request->getPost('is_pinned') ? 1 : 0;
+        $isActive        = $this->request->getPost('is_active') !== null ? (int)$this->request->getPost('is_active') : 1;
+
+        if (empty($judul) || empty($isi)) {
+            return redirect()->back()->withInput()->with('error', 'Judul dan isi pengumuman wajib diisi!');
+        }
+
+        $announcementModel->update($id, [
+            'judul'            => $judul,
+            'kategori'         => $kategori,
+            'isi'              => $isi,
+            'pekan_ke'         => $pekanKe,
+            'tanggal_kegiatan' => $tanggalKegiatan,
+            'waktu_kegiatan'   => $waktuKegiatan,
+            'lokasi'           => $lokasi,
+            'penyelenggara'    => $penyelenggara,
+            'is_pinned'        => $isPinned,
+            'is_active'        => $isActive,
+        ]);
+
+        return redirect()->to(base_url('admin/announcements'))
+            ->with('notif_type', 'edit')
+            ->with('notif_title', 'Pengumuman Berhasil Diperbarui!')
+            ->with('notif_msg', "Pengumuman '{$judul}' telah berhasil diupdate.");
+    }
+
+    public function toggleAnnouncementStatus($id)
+    {
+        $id = (int)$id;
+        $announcementModel = new \App\Models\AnnouncementModel();
+        $item = $announcementModel->find($id);
+
+        if (!$item) {
+            return redirect()->to(base_url('admin/announcements'))->with('error', 'Pengumuman tidak ditemukan.');
+        }
+
+        $newStatus = $item['is_active'] ? 0 : 1;
+        $announcementModel->update($id, ['is_active' => $newStatus]);
+
+        $statusText = $newStatus ? 'ditampilkan kembali' : 'disembunyikan (arsip)';
+        return redirect()->to(base_url('admin/announcements'))
+            ->with('notif_type', 'edit')
+            ->with('notif_title', 'Status Pengumuman Diubah!')
+            ->with('notif_msg', "Pengumuman '{$item['judul']}' kini {$statusText} di papan pengumuman.");
+    }
+
+    public function deleteAnnouncement($id)
+    {
+        $id = (int)$id;
+        $announcementModel = new \App\Models\AnnouncementModel();
+        $item = $announcementModel->find($id);
+
+        if (!$item) {
+            return redirect()->to(base_url('admin/announcements'))->with('error', 'Pengumuman tidak ditemukan.');
+        }
+
+        $announcementModel->delete($id);
+
+        return redirect()->to(base_url('admin/announcements'))
+            ->with('notif_type', 'delete')
+            ->with('notif_title', 'Pengumuman Dihapus!')
+            ->with('notif_msg', "Pengumuman '{$item['judul']}' telah dihapus dari papan pengumuman.");
+    }
 }

@@ -13,6 +13,14 @@
 
         <!-- ===================== HERO WAVE BANNER ===================== -->
         <?php
+        ob_start();
+        ?>
+        <a href="<?= base_url('instruktur/download-nilai-csv'); ?>" class="px-3.5 py-2.5 bg-white text-emerald-800 hover:bg-emerald-50 rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5 shrink-0">
+            <i class="fa-solid fa-file-csv text-emerald-600 text-sm"></i> Download Rekap Nilai (CSV)
+        </a>
+        <?php
+        $extra_download_nilai = ob_get_clean();
+
         $hero = [
             'breadcrumb' => [
                 ['label' => 'Portal Instruktur', 'url' => base_url('instruktur')],
@@ -21,6 +29,7 @@
             'badge' => 'Lembaga Pendidikan E-RGI Syiar Gemilang',
             'title' => 'Input & Evaluasi Nilai Santri',
             'subtitle' => 'Pencatatan dan pembaruan berkala nilai akademik 4 mata pelajaran dan pembobotan adab santri untuk evaluasi capaian kompetensi.',
+            'extra_action' => $extra_download_nilai,
             'stats' => [
                 ['icon' => 'fa-solid fa-users', 'bg' => 'bg-sky-400/20 text-sky-200', 'value' => count($data_siswa ?? []), 'label' => 'Santri Dinilai'],
                 ['icon' => 'fa-solid fa-book-open', 'bg' => 'bg-emerald-400/20 text-emerald-200', 'value' => $total_mapel ?? 4, 'label' => 'Mata Pelajaran'],
@@ -87,11 +96,19 @@
                     </h3>
                     <p class="text-xs text-slate-500">Klik tombol "Edit Nilai" pada santri untuk mengupdate nilai mata pelajaran & adab.</p>
                 </div>
-                <!-- Live Search Box -->
-                <div class="relative w-full sm:w-64">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
-                    <input type="text" id="searchSantri" onkeyup="filterTable()" placeholder="Cari santri / kelas..." 
-                           class="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand focus:outline-none">
+                <!-- Search Box & Export CSV -->
+                <div class="flex items-center gap-2.5">
+                    <div class="relative w-full sm:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+                        <input type="text" id="searchSantri" onkeyup="filterTable()" placeholder="Cari santri / kelas..." 
+                               class="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand focus:border-brand focus:outline-none">
+                    </div>
+                    <a href="<?= base_url('instruktur/download-nilai-csv'); ?>" 
+                       title="Download Rekap Nilai CSV"
+                       class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-xs transition flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+                        <i class="fa-solid fa-file-csv text-sm"></i>
+                        <span class="hidden sm:inline">Export CSV</span>
+                    </a>
                 </div>
             </div>
 

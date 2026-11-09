@@ -12,6 +12,7 @@ class StudentModel extends Model
 
     // Kolom perhitungan nilai dengan pembobotan 80% Akademik + 20% Adab & Akhlaq
     private string $selectFormula = 'id, nama, nis, cabang, kelas, angkatan, status, foto, tauhid, b_ing, menulis_kreatif, fiqih, adab_akhlaq, kehadiran,
+        (SELECT COUNT(*) FROM presensi_log WHERE presensi_log.santri_id = nilai_santri.id AND presensi_log.status = "Absen") as total_absen,
         ROUND((tauhid + b_ing + menulis_kreatif + fiqih) / 4, 2) as rata_akademik,
         ROUND((((tauhid + b_ing + menulis_kreatif + fiqih) / 4 * 0.8) + (adab_akhlaq * 0.2)), 2) as rata_rata';
 

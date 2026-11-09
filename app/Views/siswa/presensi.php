@@ -57,6 +57,35 @@ $myKelasBadge = $jurusanColors[$santri['kelas']]['badge'] ?? 'bg-blue-50 text-bl
             </div>
         <?php endif; ?>
 
+        <!-- Alert Peringatan Absen Melebihi Batas (>3x) -->
+        <?php if (!empty($is_warning_absen)) : ?>
+            <div class="rounded-2xl bg-gradient-to-r from-rose-500 via-rose-600 to-red-700 text-white p-5 sm:p-6 shadow-lg shadow-rose-600/20 border border-rose-400/40 relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 w-32 h-32 rounded-full bg-white/10 pointer-events-none"></div>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md text-white flex items-center justify-center text-2xl shrink-0 border border-white/30 shadow-inner">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/25 text-white text-3xs font-extrabold uppercase tracking-wider mb-1.5 border border-white/30">
+                                <i class="fa-solid fa-bell"></i> Peringatan Kedisiplinan Akademik
+                            </div>
+                            <h3 class="text-base sm:text-lg font-black tracking-tight text-white leading-tight">
+                                Perhatian: Anda Telah Tercatat Absen / Alpa Sebanyak <?= (int)$absen_count; ?> Kali!
+                            </h3>
+                            <p class="text-xs text-white/90 mt-1 max-w-2xl leading-relaxed">
+                                Anda telah absen lebih dari 3 kali pertemuan tanpa surat keterangan resmi. Segera konsultasikan kendala presensi Anda kepada <strong>Instruktur Kejuruan</strong> atau <strong>Wali Kelas</strong> sebelum sesi evaluasi bulanan ditutup.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="px-3.5 py-2 bg-white/20 backdrop-blur-sm rounded-xl text-xs font-bold border border-white/30 shrink-0 text-center">
+                        <span class="block text-3xs uppercase tracking-wider text-white/80">Total Alpa</span>
+                        <span class="text-lg font-black text-white"><?= (int)$absen_count; ?> Kali</span>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <!-- Two Column Layout: Presensi Form (Left) & Riwayat Kehadiran (Right) -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 

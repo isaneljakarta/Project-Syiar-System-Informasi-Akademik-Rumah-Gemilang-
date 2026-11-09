@@ -52,14 +52,23 @@ class Siswa extends BaseController
             'count_absen' => 0,
         ];
 
+        $absenCount     = (int)($myRekap['count_absen'] ?? 0);
+        $isWarningAbsen = $absenCount > 3;
+        $absenLogs      = array_values(array_filter($myLogs, function($l) {
+            return ($l['status'] ?? '') === 'Absen';
+        }));
+
         $data = [
-            'title'          => 'Dashboard Santri',
-            'santri'         => $santri,
-            'rank'           => $rankPosition,
-            'total_siswa'    => $studentModel->countAll(),
-            'my_logs'        => $myLogs,
-            'my_rekap'       => $myRekap,
-            'sesi_kehadiran' => $studentModel->getSesiKehadiran(),
+            'title'            => 'Dashboard Santri',
+            'santri'           => $santri,
+            'rank'             => $rankPosition,
+            'total_siswa'      => $studentModel->countAll(),
+            'my_logs'          => $myLogs,
+            'my_rekap'         => $myRekap,
+            'sesi_kehadiran'   => $studentModel->getSesiKehadiran(),
+            'absen_count'      => $absenCount,
+            'is_warning_absen' => $isWarningAbsen,
+            'absen_logs'       => $absenLogs,
         ];
 
         return view('siswa/dashboard', $data);
@@ -91,12 +100,21 @@ class Siswa extends BaseController
             'count_absen' => 0,
         ];
 
+        $absenCount     = (int)($myRekap['count_absen'] ?? 0);
+        $isWarningAbsen = $absenCount > 3;
+        $absenLogs      = array_values(array_filter($myLogs, function($l) {
+            return ($l['status'] ?? '') === 'Absen';
+        }));
+
         $data = [
-            'title'          => 'Presensi Mandiri Santri',
-            'santri'         => $santri,
-            'sesi_kehadiran' => $studentModel->getSesiKehadiran(),
-            'my_logs'        => $myLogs,
-            'my_rekap'       => $myRekap,
+            'title'            => 'Presensi Mandiri Santri',
+            'santri'           => $santri,
+            'sesi_kehadiran'   => $studentModel->getSesiKehadiran(),
+            'my_logs'          => $myLogs,
+            'my_rekap'         => $myRekap,
+            'absen_count'      => $absenCount,
+            'is_warning_absen' => $isWarningAbsen,
+            'absen_logs'       => $absenLogs,
         ];
 
         return view('siswa/presensi', $data);
